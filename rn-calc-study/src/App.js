@@ -1,36 +1,45 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import Button, { ButtonTypes } from "./components/Button";
+import React, { useState } from "react";
 
 const App = () => {
   console.log("###### start app ######");
 
+  const [result, setResult] = useState(0);
+  console.log('rendering: ', result);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Text style={styles.text}>Calc App</Text>
-      <Button
-        title="1"
-        onPress={() => console.log(1)}
-        buttonStyle={{ width: 100, height: 100 }}
-        buttonType={ButtonTypes.NUMBER}
-      />
-      <Button
-        title="0"
-        onPress={() => console.log(0)}
-        buttonStyle={{ width: 200, height: 100 }}
-        buttonType={ButtonTypes.NUMBER}
-      />
+      <Text style={styles.text}>{result}</Text>
       <Button
         title="+"
-        onPress={() => console.log(0)}
-        buttonStyle={{ width: 100, height: 200 }}
+        // onPress={() => {
+        //   setResult(result + 1);
+        //   console.log("+ : ", result);
+        // }}
+        onPress={() => {
+            setResult((prevState) => {
+                console.log('prevState 1 : ', prevState);
+                return prevState + 1;
+            });
+            setResult((prevState) => {
+                console.log('prevState 2 : ', prevState);
+                return prevState + 1;
+            });
+        }}
+        buttonStyle={styles.button}
         buttonType={ButtonTypes.OPERATOR}
       />
+      <View style={{ paddingVertical: 10 }}></View>
       <Button
         title="-"
-        onPress={() => console.log(0)}
-        buttonStyle={{ width: 100, height: 100 }}
+        onPress={() => {
+          setResult(result - 1);
+          console.log("- : ", result);
+        }}
+        buttonStyle={styles.button}
         buttonType={ButtonTypes.OPERATOR}
       />
     </View>
@@ -45,19 +54,12 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   text: {
-    fontSize: 30,
-    fontWeight: "700",
-    color: "green",
-    backgroundColor: "yellow",
-    borderWidth: 1,
-    borderColor: "blue",
-    paddingHorizontal: 20,
-    paddingVertical: 10
+    fontSize: 60,
+    fontWeight: "700"
   },
-  error: {
-    fontSize: 30,
-    fontWeight: "700",
-    color: "red"
+  button: {
+    width: 100,
+    height: 100
   }
 });
 
