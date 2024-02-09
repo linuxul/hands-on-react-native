@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#71717a",
+    backgroundColor: "#71717a"
   },
   title: {
     color: "#ffffff",
