@@ -3,7 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 // import React from 'react';
 
 export default function App() {
-  console.log('Expo React Native.')
+  console.log('Expo React Native.');
+  console.log('test');
 
   const testNumber = 10;
   const name = 'tom';
@@ -14,9 +15,9 @@ export default function App() {
   };
 
   return (
-    <View 
-    style={styles.container}
-    // 여는 태그 주석
+    <View
+      style={styles.container}
+      // 여는 태그 주석
     >
       <Text>My First React Native!</Text>
       <Text>My name is {name}</Text>
