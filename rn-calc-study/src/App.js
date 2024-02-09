@@ -7,41 +7,20 @@ const App = () => {
   console.log("###### start app ######");
 
   const [result, setResult] = useState(0);
-  console.log('rendering: ', result);
+  console.log("rendering: ", result);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Text style={styles.text}>{result}</Text>
-      <Button
-        title="+"
-        // onPress={() => {
-        //   setResult(result + 1);
-        //   console.log("+ : ", result);
-        // }}
-        onPress={() => {
-            setResult((prevState) => {
-                console.log('prevState 1 : ', prevState);
-                return prevState + 1;
-            });
-            setResult((prevState) => {
-                console.log('prevState 2 : ', prevState);
-                return prevState + 1;
-            });
-        }}
-        buttonStyle={styles.button}
-        buttonType={ButtonTypes.OPERATOR}
-      />
-      <View style={{ paddingVertical: 10 }}></View>
-      <Button
-        title="-"
-        onPress={() => {
-          setResult(result - 1);
-          console.log("- : ", result);
-        }}
-        buttonStyle={styles.button}
-        buttonType={ButtonTypes.OPERATOR}
-      />
+
+      <View style={styles.resultContainer}>
+        <Text style={styles.text}>{result}</Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Text>Button</Text>
+      </View>
+
     </View>
   );
 };
@@ -49,17 +28,27 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: "#fff",
-    alignItems: "center",
+    alignItems: "stretch",
     justifyContent: "center"
   },
   text: {
     fontSize: 60,
-    fontWeight: "700"
+    fontWeight: "700",
+    color: "#ffffff",
+    paddingBottom: 30,
+    paddingRight: 30,
   },
-  button: {
-    width: 100,
-    height: 100
+  resultContainer: {
+    flex: 1,
+    backgroundColor: "#000000",
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: "#a5b4fc"
   }
 });
 
