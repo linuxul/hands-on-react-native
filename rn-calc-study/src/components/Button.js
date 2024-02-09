@@ -16,12 +16,7 @@ const Button = ({ title, onPress, buttonStyle, buttonType }) => {
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.button,
-        { backgroundColor: Colors[buttonType][0] },
-        pressed && { backgroundColor: Colors[buttonType][1] },
-        buttonStyle
-      ]}
+      style={({ pressed }) => [styles.button, { backgroundColor: Colors[buttonType][0] }, pressed && { backgroundColor: Colors[buttonType][1] }, buttonStyle]}
       onPressOut={onPress}
     >
       <Text style={styles.title}>{title}</Text>
@@ -44,7 +39,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#71717a"
+    backgroundColor: "#71717a",
   },
   title: {
     color: "#ffffff",
