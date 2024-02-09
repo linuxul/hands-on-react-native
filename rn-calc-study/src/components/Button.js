@@ -2,8 +2,13 @@ import { Text, StyleSheet, Pressable } from "react-native";
 import PropTypes from "prop-types";
 
 const ButtonTypes = {
-    NUMBER: 'NUMBER',
-    OPERATOR: 'OPERATOR'
+  NUMBER: "NUMBER",
+  OPERATOR: "OPERATOR"
+};
+
+const Colors = {
+  NUMBER: ["#71717a", "#3f3f46"],
+  OPERATOR: ["#f59e0b", "#b45309"]
 };
 
 const Button = ({ title, onPress, buttonStyle, buttonType }) => {
@@ -13,10 +18,8 @@ const Button = ({ title, onPress, buttonStyle, buttonType }) => {
     <Pressable
       style={({ pressed }) => [
         styles.button,
-        {
-            backgroundColor: buttonType === ButtonTypes.NUMBER ? '#71717a' : '#f59e0b',
-        },
-        pressed && { backgroundColor: buttonType === ButtonTypes.NUMBER ? '#3f3f46' : '#b45309' },
+        { backgroundColor: Colors[buttonType][0] },
+        pressed && { backgroundColor: Colors[buttonType][1] },
         buttonStyle
       ]}
       onPressOut={onPress}
@@ -27,8 +30,8 @@ const Button = ({ title, onPress, buttonStyle, buttonType }) => {
 };
 
 Button.defaultProps = {
-    buttonType: ButtonTypes.NUMBER
-}
+  buttonType: ButtonTypes.NUMBER
+};
 
 Button.propTypes = {
   title: PropTypes.string.isRequired,
