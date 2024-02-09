@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Button, { ButtonTypes } from "./components/Button";
-import React, { useState } from "react";
+import { Button, ButtonTypes } from "./components/Button";
+import { React, useState } from "react";
 
 const App = () => {
   console.log("###### start app ######");
@@ -11,7 +11,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
 
       <View style={styles.resultContainer}>
         <Text style={styles.text}>{result}</Text>
@@ -20,7 +20,6 @@ const App = () => {
       <View style={styles.buttonContainer}>
         <Text>Button</Text>
       </View>
-
     </View>
   );
 };
@@ -28,7 +27,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
     backgroundColor: "#fff",
     alignItems: "stretch",
     justifyContent: "center"
@@ -38,13 +37,13 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#ffffff",
     paddingBottom: 30,
-    paddingRight: 30,
+    paddingRight: 30
   },
   resultContainer: {
     flex: 1,
     backgroundColor: "#000000",
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end'
+    justifyContent: "flex-end",
+    alignItems: "flex-end"
   },
   buttonContainer: {
     flex: 1,
