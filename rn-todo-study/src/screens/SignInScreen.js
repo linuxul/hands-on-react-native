@@ -1,12 +1,8 @@
 import {
   Image,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
   StyleSheet,
-  Text,
-  View
+  View,
 } from "react-native";
 import Input, {
   IconNames,
@@ -15,11 +11,17 @@ import Input, {
 } from "../components/Input";
 import SafeInputView from "./SafeInputView";
 import { useRef, useState } from "react";
+import Button from "../components/Button";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const passwordRef = useRef(null);
+
+  const onSubmit = () => {
+    Keyboard.dismiss();
+    console.log(email, password);
+  };
 
   return (
     <SafeInputView>
@@ -37,6 +39,7 @@ const SignInScreen = () => {
           value={email}
           onChangeText={email => setEmail(email.trim())}
           iconName={IconNames.EMAIL}
+          onSubmitediting={() => passwordRef.current.focus()}
         ></Input>
         <Input
           ref={passwordRef}
@@ -46,7 +49,12 @@ const SignInScreen = () => {
           value={password}
           onChangeText={password => setPassword(password.trim())}
           iconName={IconNames.PASSWORD}
+          onSubmitEditing={onSubmit}
         ></Input>
+
+        <View style={styles.buttonContainer}>
+          <Button title="로그인" onPress={onSubmit}></Button>
+        </View>
       </View>
     </SafeInputView>
   );
@@ -61,6 +69,11 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 30,
+    paddingHorizontal: 20
   }
 });
 

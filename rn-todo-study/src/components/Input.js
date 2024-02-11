@@ -76,6 +76,8 @@ const Input = forwardRef(
   }
 );
 
+Input.displayName = 'Input'
+
 Input.defaultProps = {
   keyboardType: KeyboardTypes.DEFAULT,
   returnKeyType: ReturnKeyTypes.DONE
