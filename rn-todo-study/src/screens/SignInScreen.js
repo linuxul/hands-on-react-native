@@ -10,8 +10,13 @@ import {
 } from "react-native";
 import Input, { ReturnKeyTypes, KeyboardTypes } from "../components/Input";
 import SafeInputView from "./SafeInputView";
+import { useState } from 'react';
 
 const SignInScreen = () => {
+  
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   return (
     <SafeInputView>
       <View style={styles.container}>
@@ -25,11 +30,15 @@ const SignInScreen = () => {
           placeholder="your@email.com"
           keyboardType={KeyboardTypes.EMAIL}
           returnKeyType={ReturnKeyTypes.NEXT}
+          value={email}
+          onChangeText={(email) => setEmail(email.trim())}
         ></Input>
         <Input
           title={"비밀번호"}
           returnKeyType={ReturnKeyTypes.DONE}
           secureTextEntry
+          value={password}
+          onChangeText={(password) => setPassword(password.trim())}
         ></Input>
       </View>
     </SafeInputView>
