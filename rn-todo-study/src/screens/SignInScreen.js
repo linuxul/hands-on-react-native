@@ -1,4 +1,4 @@
-import { Image, Keyboard, StyleSheet, View } from "react-native";
+import { Alert, Image, Keyboard, StyleSheet, View } from "react-native";
 import Input, {
   IconNames,
   ReturnKeyTypes,
@@ -14,6 +14,7 @@ const SignInScreen = () => {
   const [password, setPassword] = useState("");
   const passwordRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("always: ", email, password);
@@ -31,13 +32,31 @@ const SignInScreen = () => {
     setDisabled(!email || !password);
   }, [email, password]);
 
-  const onSubmit = () => {
-    Keyboard.dismiss();
-    console.log(email, password);
-    signIn(email, password)
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
+  const onSubmit = async () => {
+    if (!isLoading && !disabled) {
+      try {
+        setIsLoading(true);
+        Keyboard.dismiss();
+        const data = await signIn(email, password);
+        console.log(data);
+      } catch (error) {
+        Alert.alert("로그인 실패", error, [
+          { text: "확인", onPress: () => setIsLoading(false) }
+        ]);
+
+        console.log(error);
+      }
+      setIsLoading(false);
+    }
   };
+
+  // const onSubmit = () => {
+  //   Keyboard.dismiss();
+  //   console.log(email, password);
+  //   signIn(email, password)
+  //     .then(data => console.log(data))
+  //     .catch(error => console.log(error));
+  // };
 
   return (
     <SafeInputView>
@@ -73,6 +92,7 @@ const SignInScreen = () => {
             title="로그인"
             onPress={onSubmit}
             disabled={disabled}
+            isLoading={isLoading}
           ></Button>
         </View>
       </View>
