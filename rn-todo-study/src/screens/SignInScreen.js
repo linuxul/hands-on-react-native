@@ -1,22 +1,34 @@
-import {
-  Image,
-  Keyboard,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Image, Keyboard, StyleSheet, View } from "react-native";
 import Input, {
   IconNames,
   ReturnKeyTypes,
   KeyboardTypes
 } from "../components/Input";
 import SafeInputView from "./SafeInputView";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const passwordRef = useRef(null);
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    console.log("always: ", email, password);
+  });
+
+  useEffect(() => {
+    console.log("first rendering: ", email, password);
+  }, []);
+
+  useEffect(() => {
+    console.log("only email: ", email, password);
+  }, [email]);
+
+  useEffect(() => {
+    setDisabled(!email || !password)
+  }, [email, password])
 
   const onSubmit = () => {
     Keyboard.dismiss();
@@ -53,7 +65,11 @@ const SignInScreen = () => {
         ></Input>
 
         <View style={styles.buttonContainer}>
-          <Button title="로그인" onPress={onSubmit}></Button>
+          <Button
+            title="로그인"
+            onPress={onSubmit}
+            disabled={disabled}
+          ></Button>
         </View>
       </View>
     </SafeInputView>
@@ -71,7 +87,7 @@ const styles = StyleSheet.create({
     height: 200
   },
   buttonContainer: {
-    width: '100%',
+    width: "100%",
     marginTop: 30,
     paddingHorizontal: 20
   }
