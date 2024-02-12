@@ -5,18 +5,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./navigations/AuthStack";
 import MainStack from "./navigations/MainStack";
 import { useState } from "react";
-import UserContext from "./contexts/UserContext";
+import UserContext, { UserProvider } from "./contexts/UserContext";
+import Navigation from "./navigations/Navigation";
 
 const App = () => {
   const [user, setUser] = useState(null);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <NavigationContainer>
-        <StatusBar style="dark"></StatusBar>
-        {user ? <MainStack /> : <AuthStack />}
-      </NavigationContainer>
-    </UserContext.Provider>
+    <UserProvider>
+      <StatusBar style="dark">
+      </StatusBar>
+      <Navigation></Navigation>
+    </UserProvider>
   );
 };
 
