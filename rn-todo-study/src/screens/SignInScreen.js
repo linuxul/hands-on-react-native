@@ -8,13 +8,25 @@ import SafeInputView from "./SafeInputView";
 import { useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import { signIn } from "../api/auth";
+import PropTypes from "prop-types";
 
-const SignInScreen = () => {
+const SignInScreen = ({ navigation }) => {
+  console.log(navigation);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const passwordRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    navigation.setOptions({
+      contentStyle: {
+        // backgroundColor: "gainsboro"
+        backgroundColor: email ? 'lightskyblue' : 'gainsboro'
+      }
+    });
+  }, [email, navigation]);
 
   useEffect(() => {
     console.log("always: ", email, password);
@@ -39,6 +51,7 @@ const SignInScreen = () => {
         Keyboard.dismiss();
         const data = await signIn(email, password);
         console.log(data);
+        navigation.navigate("List");
       } catch (error) {
         Alert.alert("로그인 실패", error, [
           { text: "확인", onPress: () => setIsLoading(false) }
@@ -49,14 +62,6 @@ const SignInScreen = () => {
       setIsLoading(false);
     }
   };
-
-  // const onSubmit = () => {
-  //   Keyboard.dismiss();
-  //   console.log(email, password);
-  //   signIn(email, password)
-  //     .then(data => console.log(data))
-  //     .catch(error => console.log(error));
-  // };
 
   return (
     <SafeInputView>
@@ -98,6 +103,10 @@ const SignInScreen = () => {
       </View>
     </SafeInputView>
   );
+};
+
+SignInScreen.propTypes = {
+  navigation: PropTypes.object
 };
 
 const styles = StyleSheet.create({

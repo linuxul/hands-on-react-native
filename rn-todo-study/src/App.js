@@ -3,14 +3,15 @@ import { StyleSheet, Text, View } from "react-native";
 import SignInScreen from "./screens/SignInScreen";
 import TestAvoid from "./screens/TestAvoid";
 import { WHITE } from "./colors";
+import { NavigationContainer } from "@react-navigation/native";
+import AuthStack from "./navigations/AuthStack";
 
 const App = () => {
   return (
-    <View style={styles.container}>
+    <NavigationContainer>
       <StatusBar style="dark"></StatusBar>
-      <SignInScreen></SignInScreen>
-      {/* <TestAvoid /> */}
-    </View>
+      <AuthStack></AuthStack>
+    </NavigationContainer>
   );
 };
 
