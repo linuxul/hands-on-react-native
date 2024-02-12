@@ -9,9 +9,16 @@ import { useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
 import { signIn } from "../api/auth";
 import PropTypes from "prop-types";
+import {
+  SafeAreaView,
+  SafeAreaInsets,
+  useSafeAreaInsets
+} from "react-native-safe-area-context";
 
 const SignInScreen = ({ navigation }) => {
-  console.log(navigation);
+  const insets = useSafeAreaInsets();
+  console.log(insets);
+  // console.log(navigation);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +63,7 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <SafeInputView>
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <Image
           source={require("../../assets/main.png")}
           style={styles.image}
