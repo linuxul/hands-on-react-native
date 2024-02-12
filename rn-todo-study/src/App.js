@@ -1,17 +1,22 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import SignInScreen from "./screens/SignInScreen";
-import TestAvoid from "./screens/TestAvoid";
 import { WHITE } from "./colors";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./navigations/AuthStack";
+import MainStack from "./navigations/MainStack";
+import { useState } from "react";
+import UserContext from "./contexts/UserContext";
 
 const App = () => {
+  const [user, setUser] = useState(null);
+
   return (
-    <NavigationContainer>
-      <StatusBar style="dark"></StatusBar>
-      <AuthStack></AuthStack>
-    </NavigationContainer>
+    <UserContext.Provider value={{ user, setUser }}>
+      <NavigationContainer>
+        <StatusBar style="dark"></StatusBar>
+        {user ? <MainStack /> : <AuthStack />}
+      </NavigationContainer>
+    </UserContext.Provider>
   );
 };
 

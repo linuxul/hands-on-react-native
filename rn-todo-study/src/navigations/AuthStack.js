@@ -8,7 +8,7 @@ import SettingsScreen from "../screens/SettingScreen";
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = () => {
+const AuthStack = props => {
   return (
     <Stack.Navigator
       screenOptions={{
