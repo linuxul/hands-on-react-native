@@ -3,7 +3,9 @@ import SignInScreen from "../screens/SignInScreen";
 import ListScreen from "../screens/ListScreen";
 import { PRIMARY, WHITE } from "../colors";
 import HeaderLeftButton from "../components/HeaderLeftButton";
-import { Header } from "react-native/Libraries/NewAppScreen";
+import HeaderRightButton from "../components/HeaderRightButton";
+import SettingsScreen from "../screens/SettingScreen";
+// import { Header } from "react-native/Libraries/NewAppScreen";
 // import { Pressable, Text } from "react-native";
 // import { MaterialCommunityIcons } from "@expo/vector-icons";
 // import { useNavigation } from "@react-navigation/native";
@@ -44,16 +46,19 @@ const AuthStack = () => {
         name="List"
         component={ListScreen}
         options={{
-          title: "TODO List"
+          title: "TODO List",
+          headerRight: HeaderRightButton
         }}
       ></Stack.Screen>
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}
         options={{
-          title: "로그인"
+          title: "로그인",
+          headerShown: false
         }}
       ></Stack.Screen>
+      <Stack.Screen name="Settings" component={SettingsScreen}></Stack.Screen>
     </Stack.Navigator>
   );
 };
