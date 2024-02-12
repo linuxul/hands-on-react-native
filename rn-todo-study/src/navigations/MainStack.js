@@ -8,17 +8,30 @@ import SettingsScreen from "../screens/SettingScreen";
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = () => {
+const MainStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         contentStyle: { backgroundColor: WHITE },
-        headerShown: false
+        headerTitleAlign: "center",
+        headerTintColor: PRIMARY.DEFAULT,
+        headerTitleStyle: {
+          fontWeight: "700"
+        },
+        headerLeft: HeaderLeftButton
       }}
     >
-      <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
+      <Stack.Screen
+        name="List"
+        component={ListScreen}
+        options={{
+          title: "TODO List",
+          headerRight: HeaderRightButton
+        }}
+      ></Stack.Screen>
+      <Stack.Screen name="Settings" component={SettingsScreen}></Stack.Screen>
     </Stack.Navigator>
   );
 };
 
-export default AuthStack;
+export default MainStack;
