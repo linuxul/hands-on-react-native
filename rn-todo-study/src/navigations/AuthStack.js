@@ -1,14 +1,10 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignInScreen from "../screens/SignInScreen";
-import ListScreen from "../screens/ListScreen";
-import { PRIMARY, WHITE } from "../colors";
-import HeaderLeftButton from "../components/HeaderLeftButton";
-import HeaderRightButton from "../components/HeaderRightButton";
-import SettingsScreen from "../screens/SettingScreen";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignInScreen from '../screens/SignInScreen';
+import { PRIMARY, WHITE } from '../colors';
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = props => {
+const AuthStack = (props) => {
   return (
     <Stack.Navigator
       screenOptions={{

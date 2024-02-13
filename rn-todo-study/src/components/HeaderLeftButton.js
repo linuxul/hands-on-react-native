@@ -1,7 +1,7 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import PropTypes from "prop-types";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 
 const HeaderLeftButton = ({ canGoBack, tintColor }) => {
   const navigation = useNavigation();

@@ -1,29 +1,33 @@
-import { Pressable, FlatList, StyleSheet, Text, View } from "react-native";
-import ListItem from "../components/ListItem";
-import { GRAY } from "../colors";
-import PropTypes from "prop-types";
+import { Pressable, FlatList, StyleSheet, Text, View } from 'react-native';
+import ListItem from '../components/ListItem';
+import { GRAY } from '../colors';
+import PropTypes from 'prop-types';
 
-const Seperator = () => {
+const Separator = () => {
   return <View style={styles.separator}></View>;
 };
 
-const List = ({ data, setIsBottom, onDelete }) => {
+const List = ({ data, setIsBottom, onDelete, onToggle }) => {
   return (
     <FlatList
       data={data}
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
-        <ListItem item={item} onDelete={onDelete}></ListItem>
+        <ListItem
+          item={item}
+          onDelete={onDelete}
+          onToggle={onToggle}
+        ></ListItem>
       )}
       windowSize={2}
-      ItemSeparatorComponent={Seperator}
+      ItemSeparatorComponent={Separator}
       ListHeaderComponent={View}
       ListHeaderComponentStyle={{ height: 10 }}
       onScroll={({
         nativeEvent: { contentOffset, layoutMeasurement, contentSize }
       }) => {
         console.log(
-          "from bottom : ",
+          'from bottom : ',
           contentSize.height - (contentOffset.y + layoutMeasurement.height)
         );
 
@@ -38,7 +42,8 @@ const List = ({ data, setIsBottom, onDelete }) => {
 List.propTypes = {
   data: PropTypes.array.isRequired,
   setIsBottom: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onToggle: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

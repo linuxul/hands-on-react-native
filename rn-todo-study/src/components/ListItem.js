@@ -1,21 +1,21 @@
-import { memo } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import PropTypes from "prop-types";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { DANGER, BLACK, PRIMARY, GRAY } from "../colors";
+import { memo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import PropTypes from 'prop-types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { DANGER, BLACK, PRIMARY, GRAY } from '../colors';
 
-const ListItem = memo(({ item, onDelete }) => {
-  console.log("item : " + JSON.stringify(item));
+const ListItem = memo(({ item, onDelete, onToggle }) => {
+  console.log('item : ' + JSON.stringify(item));
 
   const checkboxProps = {
-    name: item.isDone ? "checkbox-marked" : "checkbox-blank-outline",
+    name: item.isDone ? 'checkbox-marked' : 'checkbox-blank-outline',
     color: item.isDone ? PRIMARY.DEFAULT : BLACK,
     size: 20
   };
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => {}} hitSlop={10}>
+      <Pressable onPress={() => onToggle(item.id)} hitSlop={10}>
         <MaterialCommunityIcons {...checkboxProps}></MaterialCommunityIcons>
       </Pressable>
 
@@ -34,11 +34,12 @@ const ListItem = memo(({ item, onDelete }) => {
   );
 });
 
-ListItem.displayName = "ListItem";
+ListItem.displayName = 'ListItem';
 
 ListItem.propTypes = {
   item: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onToggle: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -48,8 +49,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderWidth: 1,
     borderRadius: 8,
-    flexDirection: "row",
-    alignItems: "center"
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   task: {
     flex: 1,

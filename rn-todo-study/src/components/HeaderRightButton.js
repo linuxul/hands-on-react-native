@@ -1,7 +1,7 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-import PropTypes from "prop-types";
-import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
+import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 
 const HeaderRightButton = ({ tintColor }) => {
   const navigation = useNavigation();
@@ -9,8 +9,8 @@ const HeaderRightButton = ({ tintColor }) => {
   return (
     <Pressable
       onPress={() => {
-        console.log("click Settings");
-        navigation.navigate("Settings");
+        console.log('click Settings');
+        navigation.navigate('Settings');
       }}
       hitSlop={10}
     >

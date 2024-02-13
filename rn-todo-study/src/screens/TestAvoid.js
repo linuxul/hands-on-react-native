@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
   useWindowDimensions
-} from "react-native";
+} from 'react-native';
 
 const TestAvoid = () => {
   const height = useWindowDimensions().height;
@@ -14,21 +14,21 @@ const TestAvoid = () => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.select({ ios: "padding" })}
+      behavior={Platform.select({ ios: 'padding' })}
       contentContainerStyle={{ flex: 1 }}
     >
       <View style={{ flex: 1 }}>
-        <View style={[styles.box, { backgroundColor: "#737373" }]}>
+        <View style={[styles.box, { backgroundColor: '#737373' }]}>
           <Image
-            source={require("../../assets/main.png")}
+            source={require('../../assets/main.png')}
             style={{ width: 200, height: 200 }}
           />
         </View>
-        <View style={[styles.box, { backgroundColor: "#818cf8" }]}>
+        <View style={[styles.box, { backgroundColor: '#818cf8' }]}>
           <TextInput
             style={styles.input}
             placeholder="padding"
-            placeholderTextColor={"#000000"}
+            placeholderTextColor={'#000000'}
           />
         </View>
       </View>
@@ -39,14 +39,14 @@ const TestAvoid = () => {
 const styles = StyleSheet.create({
   box: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20
   },
   input: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     height: 40,
-    width: "100%"
+    width: '100%'
   }
 });
 

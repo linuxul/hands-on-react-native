@@ -1,10 +1,10 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
-import PropTypes from "prop-types";
-import { DANGER, GRAY, PRIMARY, WHITE } from "../colors";
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { DANGER, GRAY, PRIMARY, WHITE } from '../colors';
 
 export const ButtonTypes = {
-  PRIMARY: "PRIMARY",
-  DANGER: "DANGER"
+  PRIMARY: 'PRIMARY',
+  DANGER: 'DANGER'
 };
 
 const Button = ({ title, onPress, disabled, isLoading, buttonType }) => {
@@ -35,7 +35,7 @@ const Button = ({ title, onPress, disabled, isLoading, buttonType }) => {
 
 Button.defaultProps = {
   buttonType: ButtonTypes.PRIMARY
-}
+};
 
 Button.propTypes = {
   title: PropTypes.string.isRequired,
@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
     paddingVertical: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: PRIMARY.DEFAULT
   },
   title: {
     color: WHITE,
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     lineHeight: 20
   }
 });

@@ -1,22 +1,22 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import PropTypes from "prop-types";
-import { BLACK, GRAY, PRIMARY } from "../colors";
-import { forwardRef, useState } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import PropTypes from 'prop-types';
+import { BLACK, GRAY, PRIMARY } from '../colors';
+import { forwardRef, useState } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const KeyboardTypes = {
-  DEFAULT: "default",
-  EMAIL: "email-address"
+  DEFAULT: 'default',
+  EMAIL: 'email-address'
 };
 
 export const ReturnKeyTypes = {
-  DONE: "done",
-  NEXT: "next"
+  DONE: 'done',
+  NEXT: 'next'
 };
 
 export const IconNames = {
-  EMAIL: "email",
-  PASSWORD: "lock"
+  EMAIL: 'email',
+  PASSWORD: 'lock'
 };
 
 const Input = forwardRef(
@@ -76,7 +76,7 @@ const Input = forwardRef(
   }
 );
 
-Input.displayName = 'Input'
+Input.displayName = 'Input';
 
 Input.defaultProps = {
   keyboardType: KeyboardTypes.DEFAULT,
@@ -92,7 +92,7 @@ Input.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 20,
     marginVertical: 10
   },
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     color: BLACK
   },
   focusedTitle: {
-    fontWeight: "600",
+    fontWeight: '600',
     color: PRIMARY.DEFAULT
   },
   input: {
@@ -125,10 +125,10 @@ const styles = StyleSheet.create({
     color: PRIMARY.DEFAULT
   },
   icon: {
-    position: "absolute",
+    position: 'absolute',
     left: 8,
-    height: "100%",
-    justifyContent: "center"
+    height: '100%',
+    justifyContent: 'center'
   }
 });
 

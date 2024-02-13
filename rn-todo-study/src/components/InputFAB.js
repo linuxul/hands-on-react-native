@@ -7,18 +7,18 @@ import {
   Keyboard,
   Platform,
   Animated
-} from "react-native";
-import { BLACK, PRIMARY, WHITE } from "../colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
+} from 'react-native';
+import { BLACK, PRIMARY, WHITE } from '../colors';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const RIGHT = 10;
 const BOTTOM = 30;
 const BUTTON_WIDTH = 60;
 
 const InputFAB = ({ onInsert, isBottom }) => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef();
   const windowWidth = useWindowDimensions().width;
@@ -45,7 +45,7 @@ const InputFAB = ({ onInsert, isBottom }) => {
 
   const close = () => {
     if (isOpened) {
-      setText("");
+      setText('');
       setIsOpened(false);
       Animated.timing(inputWidth, {
         toValue: BUTTON_WIDTH,
@@ -64,7 +64,7 @@ const InputFAB = ({ onInsert, isBottom }) => {
 
   const spin = buttonRotation.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "315deg"]
+    outputRange: ['0deg', '315deg']
   });
 
   const onPressButton = () => {
@@ -79,18 +79,18 @@ const InputFAB = ({ onInsert, isBottom }) => {
   };
 
   useEffect(() => {
-    if (Platform.OS === "ios") {
-      const show = Keyboard.addListener("keyboardWillShow", e => {
-        console.log("keyboardWillShow");
+    if (Platform.OS === 'ios') {
+      const show = Keyboard.addListener('keyboardWillShow', (e) => {
+        console.log('keyboardWillShow');
         setKeyboardHeight(e.endCoordinates.height + BOTTOM);
       });
-      const hide = Keyboard.addListener("keyboardWillHide", () => {
-        console.log("keyboardWillHide");
+      const hide = Keyboard.addListener('keyboardWillHide', () => {
+        console.log('keyboardWillHide');
         setKeyboardHeight(BOTTOM);
       });
 
       return () => {
-        console.log("unmount");
+        console.log('unmount');
         show.remove();
         hide.remove();
       };
@@ -98,10 +98,10 @@ const InputFAB = ({ onInsert, isBottom }) => {
   }, []);
 
   useEffect(() => {
-    console.log("text: ", text);
+    console.log('text: ', text);
 
     return () => {
-      console.log("return : " + text);
+      console.log('return : ' + text);
     };
   }, [text]);
 
@@ -109,8 +109,8 @@ const InputFAB = ({ onInsert, isBottom }) => {
     Animated.timing(buttonRight, {
       toValue: isBottom ? RIGHT - BUTTON_WIDTH : RIGHT,
       useNativeDriver: false
-    }).start()
-  }, [buttonRight, isBottom])
+    }).start();
+  }, [buttonRight, isBottom]);
 
   return (
     <>
@@ -119,7 +119,7 @@ const InputFAB = ({ onInsert, isBottom }) => {
           styles.shape,
           styles.shadow,
           {
-            justifyContent: "center",
+            justifyContent: 'center',
             bottom: keyboardHeight,
             width: inputWidth,
             right: buttonRight,
@@ -131,7 +131,7 @@ const InputFAB = ({ onInsert, isBottom }) => {
           ref={inputRef}
           onBlur={close}
           value={text}
-          onChangeText={text => setText(text)}
+          onChangeText={(text) => setText(text)}
           style={[styles.input]}
           autoCapitalize="none"
           autoCorrect={false}
@@ -180,7 +180,7 @@ InputFAB.propTypes = {
 
 const styles = StyleSheet.create({
   position: {
-    position: "absolute",
+    position: 'absolute',
     bottom: BOTTOM,
     right: 10
   },
@@ -196,8 +196,8 @@ const styles = StyleSheet.create({
     paddingRight: BUTTON_WIDTH + 10
   },
   button: {
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   shadow: {
     shadowColor: BLACK,
