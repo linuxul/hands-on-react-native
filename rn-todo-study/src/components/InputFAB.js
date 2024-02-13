@@ -1,35 +1,143 @@
-import { Pressable, StyleSheet } from "react-native";
-import { PRIMARY, WHITE } from "../colors";
+import {
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+  useWindowDimensions,
+  Keyboard,
+  Platform
+} from "react-native";
+import { BLACK, PRIMARY, WHITE } from "../colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useEffect, useRef, useState } from "react";
+
+const BOTTOM = 30;
 
 const InputFAB = () => {
+  const [text, setText] = useState("");
+  const [isOpened, setIsOpened] = useState(false);
+  const inputRef = useRef();
+  const windowWidth = useWindowDimensions().width;
+  const [keyboardHeight, setKeyboardHeight] = useState(BOTTOM);
+
+  const open = () => {
+    inputRef.current.focus();
+    setIsOpened(true);
+  };
+
+  const close = () => {
+    if (isOpened) {
+      inputRef.current.blur();
+      setText("");
+      setIsOpened(false);
+    }
+  };
+
+  const onPressButton = () => {
+    isOpened ? close() : open();
+  };
+
+  useEffect(() => {
+    if (Platform.OS === "ios") {
+      const show = Keyboard.addListener("keyboardWillShow", e => {
+        console.log("keyboardWillShow");
+        setKeyboardHeight(e.endCoordinates.height + BOTTOM);
+      });
+      const hide = Keyboard.addListener("keyboardWillHide", () => {
+        console.log("keyboardWillHide");
+        setKeyboardHeight(BOTTOM);
+      });
+
+      return () => {
+        console.log("unmount");
+        show.remove();
+        hide.remove();
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("text: ", text);
+
+    return () => {
+      console.log("return : " + text);
+    };
+  }, [text]);
+
   return (
-    <Pressable
-      style={({ pressed }) => [
-        styles.button,
-        pressed && { backgroundColor: PRIMARY.DARK }
-      ]}
-    >
-      <MaterialCommunityIcons
-        name="plus"
-        size={24}
-        color={WHITE}
-      ></MaterialCommunityIcons>
-    </Pressable>
+    <>
+      <View
+        style={[
+          styles.position,
+          styles.shape,
+          { justifyContent: "center", bottom: keyboardHeight },
+          isOpened && { width: windowWidth - 20 }
+        ]}
+      >
+        <TextInput
+          ref={inputRef}
+          onBlur={close}
+          value={text}
+          onChangeText={text => setText(text)}
+          style={[styles.input]}
+          autoCapitalize="none"
+          autoCorrect={false}
+          textContentType="none"
+          keyboardAppearance="light"
+          returnKeyType="done"
+        ></TextInput>
+      </View>
+      <Pressable
+        style={({ pressed }) => [
+          styles.position,
+          styles.shape,
+          styles.button,
+          pressed && { backgroundColor: PRIMARY.DARK },
+          { bottom: keyboardHeight }
+        ]}
+        onPress={onPressButton}
+      >
+        <MaterialCommunityIcons
+          name="plus"
+          size={24}
+          color={WHITE}
+        ></MaterialCommunityIcons>
+      </Pressable>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
+  position: {
     position: "absolute",
-    bottom: 30,
-    right: 10,
-    width: 60,
+    bottom: BOTTOM,
+    right: 10
+  },
+  shape: {
     height: 60,
+    width: 60,
     borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: PRIMARY.DEFAULT
+  },
+  input: {
+    clolor: WHITE,
+    paddingLeft: 20,
+    paddingRight: 70
+  },
+  button: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  shadow: {
+    shadowColor: BLACK,
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5
+      },
+      android: { elevation: 5 }
+    })
   }
 });
 
