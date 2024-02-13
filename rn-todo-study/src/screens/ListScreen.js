@@ -1,40 +1,48 @@
-import { Pressable, FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EmptyList from "../components/EmptyList";
 import List from "../components/List";
 import InputFAB from "../components/InputFAB";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 const ListScreen = () => {
   const { bottom } = useSafeAreaInsets();
-  const [todos, setTodos] = useState([
-    { id: "1", task: "task", isDone: false },
-    { id: "2", task: "task", isDone: false },
-    { id: "3", task: "task", isDone: false },
-    { id: "4", task: "task", isDone: false },
-    { id: "5", task: "task", isDone: false },
-    { id: "6", task: "task", isDone: false },
-    { id: "7", task: "task", isDone: false },
-    { id: "8", task: "task", isDone: false },
-    { id: "9", task: "task", isDone: false },
-    { id: "10", task: "task", isDone: false },
-    { id: "11", task: "task", isDone: false },
-    { id: "12", task: "task", isDone: false },
-    { id: "13", task: "task", isDone: false },
-    { id: "14", task: "task", isDone: false },
-    { id: "15", task: "task", isDone: false },
-    { id: "16", task: "task", isDone: false },
-    { id: "17", task: "task", isDone: false },
-    { id: "18", task: "task", isDone: false }
-  ]);
-  console.log("todos : " + todos);
+  const [todos, setTodos] = useState([]);
+  const { getItem, setItem } = useAsyncStorage("todos");
 
   const [isBottom, setIsBottom] = useState(false);
 
+  const save = async data => {
+    try {
+      await setItem(JSON.stringify(data));
+      setTodos(data);
+    } catch (error) {
+      conlose.log("error : " + error);
+      Alert.alert("저장하기 실패", "데이터 자장에 실패했습니다.");
+    }
+  };
+
+  const load = async () => {
+    try {
+      const data = await getItem();
+      const todos = JSON.parse(data || "[]");
+      setTodos(todos);
+    } catch (error) {
+      conlose.log("error : " + error);
+      Alert.alert("불러오기 실패", "데이터 불러오기에 실패했습니다.");
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
   const onInsert = task => {
     const id = nanoid();
-    setTodos(prev => [{ id, task, isDone: false }, ...prev]);
+    const newTodos = [{ id, task, isDone: false }, ...todos];
+    save(newTodos);
   };
 
   return (
