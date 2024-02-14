@@ -1,5 +1,6 @@
 import { Button, StyleSheet, Text, View} from 'react-native'
 import { useUserState } from '../contexts/UserContext'
+import { WHITE } from '../colors'
 
 const ProfileScreen = () => {
   const [user, setUser] = useUserState()
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: WHITE
   }
 })
 

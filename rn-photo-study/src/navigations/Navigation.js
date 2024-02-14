@@ -7,6 +7,8 @@ import { initFirebase } from '../api/firebase';
 import { useUserState } from '../contexts/UserContext';
 import MainStack from './MainStack';
 import { onAuthStateChanged } from '../api/auth';
+import HomeScreen from '../screens/HomeScreen';
+import ContentTab from './ContentTab';
 
 const ImageAssets = [
   require('../../assets/cover.png'),
@@ -29,21 +31,14 @@ const Navigation = () => {
         );
 
         initFirebase();
-
-        const unsubscribe = onAuthStateChanged((user) => {
-          if (user) {
-            setUser(user);
-          }
-          setIsReady(true);
-          unsubscribe();
-        });
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e);
+      } finally {
         setIsReady(true);
       }
     })();
-  }, [setUser]);
+  }, []);
 
   const onReady = async () => {
     if (isReady) {
@@ -57,8 +52,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onReady}>
-      {/* <MainStack /> */}
-      {user.uid ? <MainStack /> : <AuthStack />}      
+      <MainStack />
     </NavigationContainer>
   );
 };
