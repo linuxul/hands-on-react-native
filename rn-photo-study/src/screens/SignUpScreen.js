@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import {
+  Alert,
   Image,
   Keyboard,
   ScrollView,
@@ -21,15 +22,16 @@ import {
   AuthFormTypes,
   initAuthForm
 } from '../reducers/authFormReducer';
+import { getAuthErrorMessages, signUp } from '../api/auth';
+import { useUserState } from '../contexts/UserContext';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
   const { top, bottom } = useSafeAreaInsets();
-
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
+  const [, setUser] = useUserState();
 
   const updateForm = (payload) => {
     const newForm = { ...form, ...payload };
@@ -44,11 +46,18 @@ const SignUpScreen = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoading) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      console.log(email, password);
+      try {
+        const user = await signUp(form);
+        setUser(user);
+      } catch (e) {
+        console.log('error : ' + JSON.stringify(e))
+        const message = getAuthErrorMessages(e.code);
+        Alert.alert('회원가입 실패', message);
+      }
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };

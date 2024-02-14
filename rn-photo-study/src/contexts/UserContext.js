@@ -5,6 +5,8 @@ const UserContext = createContext({});
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState({});
+
+  console.log('UserProvider : ' + JSON.stringify(user))
   return (
     <UserContext.Provider value={[user, setUser]}>
       {children}

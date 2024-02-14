@@ -43,6 +43,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onReady}>
+      { console.log('user #1 : ' + JSON.stringify(user))}
       {user.uid ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );

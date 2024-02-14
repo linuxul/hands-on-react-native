@@ -56,16 +56,16 @@ const SignInScreen = () => {
       try {
         const userObject = await signIn(form);
         console.log('userObject : ' + JSON.stringify(userObject));
-        // 여기서 에러 발생 setUser(userObject);
+        setUser(userObject);
       } catch (error) {
         const message = getAuthErrorMessages(error.code);
         Alert.alert('로그인 실패', message, [
           {
             text: '확인',
-            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING }),
           },
         ]);
       }
+      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
