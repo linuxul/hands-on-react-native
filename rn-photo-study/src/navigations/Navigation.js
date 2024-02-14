@@ -6,6 +6,14 @@ import { Asset } from 'expo-asset';
 import { initFirebase } from '../api/firebase';
 import { useUserState } from '../contexts/UserContext';
 import MainStack from './MainStack';
+import { onAuthStateChanged } from '../api/auth';
+
+const ImageAssets = [
+  require('../../assets/cover.png'),
+  require('../../assets/home-clock.png'),
+  require('../../assets/home-map.png'),
+  require('../../assets/icon.png'),
+];
 
 const Navigation = () => {
   const [user, setUser] = useUserState();
@@ -15,23 +23,29 @@ const Navigation = () => {
     (async () => {
       try {
         await SplashScreen.preventAutoHideAsync();
-        await Asset.fromModule(
-          require('../../assets/cover.png')
-        ).downloadAsync();
 
-        const app = initFirebase();
-        console.log('app : ' + JSON.stringify(app));
-      } catch (error) {
-        console.log('error : ' + error);
-      } finally {
+        await Promise.all(
+          ImageAssets.map((image) => Asset.fromModule(image).downloadAsync())
+        );
+
+        initFirebase();
+
+        const unsubscribe = onAuthStateChanged((user) => {
+          if (user) {
+            setUser(user);
+          }
+          setIsReady(true);
+          unsubscribe();
+        });
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e);
         setIsReady(true);
       }
     })();
   }, [setUser]);
 
   const onReady = async () => {
-    console.log('onReady');
-
     if (isReady) {
       await SplashScreen.hideAsync();
     }
@@ -43,7 +57,6 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onReady}>
-      { console.log('user #1 : ' + JSON.stringify(user))}
       {user.uid ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );

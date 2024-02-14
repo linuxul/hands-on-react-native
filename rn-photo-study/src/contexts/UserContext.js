@@ -5,17 +5,14 @@ const UserContext = createContext({});
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState({});
-
-  console.log('UserProvider : ' + JSON.stringify(user))
   return (
     <UserContext.Provider value={[user, setUser]}>
       {children}
     </UserContext.Provider>
   );
 };
-
 UserProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 const useUserState = () => useContext(UserContext);

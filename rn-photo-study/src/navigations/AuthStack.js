@@ -11,17 +11,11 @@ const AuthStack = () => {
     <Stack.Navigator
       screenOptions={{
         contentStyle: { backgroundColor: WHITE },
-        headerShown: false
+        headerShown: false,
       }}
     >
-      <Stack.Screen
-        name={AuthRoutes.SIGN_IN}
-        component={SignInScreen}
-      ></Stack.Screen>
-      <Stack.Screen
-        name={AuthRoutes.SIGN_UP}
-        component={SignUpScreen}
-      ></Stack.Screen>
+      <Stack.Screen name={AuthRoutes.SIGN_IN} component={SignInScreen} />
+      <Stack.Screen name={AuthRoutes.SIGN_UP} component={SignUpScreen} />
     </Stack.Navigator>
   );
 };

@@ -5,8 +5,7 @@ import {
   Keyboard,
   ScrollView,
   StyleSheet,
-  Text,
-  View
+  View,
 } from 'react-native';
 import TextButton from '../components/TextButton';
 import Input, { ReturnKeyTypes, InputTypes } from '../components/Input';
@@ -20,7 +19,7 @@ import { WHITE } from '../colors';
 import {
   authFormReducer,
   AuthFormTypes,
-  initAuthForm
+  initAuthForm,
 } from '../reducers/authFormReducer';
 import { getAuthErrorMessages, signUp } from '../api/auth';
 import { useUserState } from '../contexts/UserContext';
@@ -28,10 +27,12 @@ import { useUserState } from '../contexts/UserContext';
 const SignUpScreen = () => {
   const navigation = useNavigation();
   const { top, bottom } = useSafeAreaInsets();
+
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
+
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
-  const [, setUser] = useUserState();
+  const [user, setUser] = useUserState();
 
   const updateForm = (payload) => {
     const newForm = { ...form, ...payload };
@@ -42,7 +43,7 @@ const SignUpScreen = () => {
 
     dispatch({
       type: AuthFormTypes.UPDATE_FORM,
-      payload: { disabled, ...payload }
+      payload: { disabled, ...payload },
     });
   };
 
@@ -51,28 +52,32 @@ const SignUpScreen = () => {
     if (!form.disabled && !form.isLoading) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
-        const user = await signUp(form);
-        setUser(user);
+        const userObject = await signUp(form);
+        setUser(userObject);
       } catch (e) {
-        console.log('error : ' + JSON.stringify(e))
         const message = getAuthErrorMessages(e.code);
-        Alert.alert('회원가입 실패', message);
+        Alert.alert('회원가입 실패', message, [
+          {
+            text: '확인',
+            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING }),
+          },
+        ]);
       }
-      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
   return (
     <SafeInputView>
-      <StatusBar style="light"></StatusBar>
+      <StatusBar style="light" />
       <View style={[styles.container, { paddingTop: top }]}>
         <View style={StyleSheet.absoluteFill}>
           <Image
             source={require('../../assets/cover.png')}
             style={{ width: '100%' }}
             resizeMode="cover"
-          ></Image>
+          />
         </View>
+
         <ScrollView
           style={[styles.form, { paddingBottom: bottom ? bottom + 10 : 40 }]}
           contentContainerStyle={{ alignItems: 'center' }}
@@ -80,23 +85,22 @@ const SignUpScreen = () => {
           keyboardShouldPersistTaps="always"
         >
           <Input
-            styles={{ container: { marginBottom: 20 } }}
             value={form.email}
             onChangeText={(text) => updateForm({ email: text.trim() })}
             inputType={InputTypes.EMAIL}
-            returnKeyTypes={ReturnKeyTypes.NEXT}
+            returnKeyType={ReturnKeyTypes.NEXT}
             onSubmitEditing={() => passwordRef.current.focus()}
-          ></Input>
-
+            styles={{ container: { marginBottom: 20 } }}
+          />
           <Input
             ref={passwordRef}
             value={form.password}
             onChangeText={(text) => updateForm({ password: text.trim() })}
             inputType={InputTypes.PASSWORD}
-            returnKeyTypes={ReturnKeyTypes.NEXT}
+            returnKeyType={ReturnKeyTypes.NEXT}
             onSubmitEditing={() => passwordConfirmRef.current.focus()}
             styles={{ container: { marginBottom: 20 } }}
-          ></Input>
+          />
           <Input
             ref={passwordConfirmRef}
             value={form.passwordConfirm}
@@ -104,23 +108,22 @@ const SignUpScreen = () => {
               updateForm({ passwordConfirm: text.trim() })
             }
             inputType={InputTypes.PASSWORD_CONFIRM}
-            returnKeyTypes={ReturnKeyTypes.DONE}
+            returnKeyType={ReturnKeyTypes.DONE}
             onSubmitEditing={onSubmit}
             styles={{ container: { marginBottom: 20 } }}
-          ></Input>
+          />
+
           <Button
             title="회원가입"
             onPress={onSubmit}
             disabled={form.disabled}
             isLoading={form.isLoading}
-            styles={{
-              container: {
-                marginTop: 20
-              }
-            }}
-          ></Button>
-          <HR text={'or'} styles={{ container: { marginVertical: 30 } }}></HR>
-          <TextButton title={'로그인'} onPress={navigation.goBack}></TextButton>
+            styles={{ container: { marginTop: 20 } }}
+          />
+
+          <HR text={'OR'} styles={{ container: { marginVertical: 30 } }} />
+
+          <TextButton title={'로그인'} onPress={navigation.goBack} />
         </ScrollView>
       </View>
     </SafeInputView>
@@ -130,7 +133,7 @@ const SignUpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   form: {
     flexGrow: 0,
@@ -138,8 +141,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 40,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
-  }
+    borderTopRightRadius: 20,
+  },
 });
 
 export default SignUpScreen;

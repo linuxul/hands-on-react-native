@@ -1,12 +1,11 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
+  Alert,
   Image,
   StyleSheet,
-  Text,
   View,
   Keyboard,
   ScrollView,
-  Alert
 } from 'react-native';
 import { AuthRoutes } from '../navigations/routes';
 import Input, { ReturnKeyTypes, InputTypes } from '../components/Input';
@@ -21,7 +20,7 @@ import { WHITE } from '../colors';
 import {
   authFormReducer,
   AuthFormTypes,
-  initAuthForm
+  initAuthForm,
 } from '../reducers/authFormReducer';
 import { getAuthErrorMessages, signIn } from '../api/auth';
 import { useUserState } from '../contexts/UserContext';
@@ -29,9 +28,11 @@ import { useUserState } from '../contexts/UserContext';
 const SignInScreen = () => {
   const navigation = useNavigation();
   const { top, bottom } = useSafeAreaInsets();
+
   const passwordRef = useRef();
+
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
-  const [, setUser] = useUserState();
+  const [user, setUser] = useUserState();
 
   useFocusEffect(
     useCallback(() => {
@@ -45,7 +46,7 @@ const SignInScreen = () => {
 
     dispatch({
       type: AuthFormTypes.UPDATE_FORM,
-      payload: { disabled, ...payload }
+      payload: { disabled, ...payload },
     });
   };
 
@@ -55,30 +56,29 @@ const SignInScreen = () => {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
         const userObject = await signIn(form);
-        console.log('userObject : ' + JSON.stringify(userObject));
         setUser(userObject);
-      } catch (error) {
-        const message = getAuthErrorMessages(error.code);
+      } catch (e) {
+        const message = getAuthErrorMessages(e.code);
         Alert.alert('로그인 실패', message, [
           {
             text: '확인',
+            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING }),
           },
         ]);
       }
-      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
   return (
     <SafeInputView>
-      <StatusBar style="light"></StatusBar>
+      <StatusBar style="light" />
       <View style={[styles.container, { paddingTop: top }]}>
         <View style={StyleSheet.absoluteFill}>
           <Image
             source={require('../../assets/cover.png')}
             style={{ width: '100%' }}
             resizeMode="cover"
-          ></Image>
+          />
         </View>
 
         <ScrollView
@@ -88,42 +88,37 @@ const SignInScreen = () => {
           keyboardShouldPersistTaps="always"
         >
           <Input
-            styles={{ container: { marginBottom: 20 } }}
             value={form.email}
             onChangeText={(text) => updateForm({ email: text.trim() })}
-            onSubmitEditing={() => passwordRef.current.focus()}
             inputType={InputTypes.EMAIL}
-            returnKeyTypes={ReturnKeyTypes.NEXT}
-          ></Input>
-
+            returnKeyType={ReturnKeyTypes.NEXT}
+            onSubmitEditing={() => passwordRef.current.focus()}
+            styles={{ container: { marginBottom: 20 } }}
+          />
           <Input
             ref={passwordRef}
             value={form.password}
             onChangeText={(text) => updateForm({ password: text.trim() })}
-            onSubmitEditing={onSubmit}
             inputType={InputTypes.PASSWORD}
-            returnKeyTypes={ReturnKeyTypes.DONE}
+            returnKeyType={ReturnKeyTypes.DONE}
+            onSubmitEditing={onSubmit}
             styles={{ container: { marginBottom: 20 } }}
-          ></Input>
+          />
+
           <Button
             title="로그인"
             onPress={onSubmit}
             disabled={form.disabled}
             isLoading={form.isLoading}
-            styles={{
-              container: {
-                marginTop: 20
-              }
-            }}
-          ></Button>
-          <HR text={'or'} styles={{ container: { marginVertical: 30 } }}></HR>
+            styles={{ container: { marginTop: 20 } }}
+          />
+
+          <HR text={'OR'} styles={{ container: { marginVertical: 30 } }} />
+
           <TextButton
             title={'회원가입'}
-            onPress={() => {
-              console.log('register');
-              navigation.navigate(AuthRoutes.SIGN_UP);
-            }}
-          ></TextButton>
+            onPress={() => navigation.navigate(AuthRoutes.SIGN_UP)}
+          />
         </ScrollView>
       </View>
     </SafeInputView>
@@ -133,7 +128,7 @@ const SignInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   form: {
     flexGrow: 0,
@@ -141,8 +136,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 40,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
-  }
+    borderTopRightRadius: 20,
+  },
 });
 
 export default SignInScreen;
