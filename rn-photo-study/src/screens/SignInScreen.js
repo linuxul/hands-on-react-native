@@ -5,7 +5,8 @@ import {
   Text,
   View,
   Keyboard,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 import { AuthRoutes } from '../navigations/routes';
 import Input, { ReturnKeyTypes, InputTypes } from '../components/Input';
@@ -22,6 +23,7 @@ import {
   AuthFormTypes,
   initAuthForm
 } from '../reducers/authFromReducer';
+import { getAuthErrorMessages, signIn } from '../api/auth';
 
 const SignInScreen = () => {
   const navigation = useNavigation();
@@ -47,11 +49,17 @@ const SignInScreen = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoading) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      console.log(email, password);
+      try {
+        const user = await signIn(form);
+        console.log('user : ' + JSON.stringify(user));
+      } catch (error) {
+        const message = getAuthErrorMessages(error.code);
+        Alert.alert('로그인 실패', message);
+      }
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
