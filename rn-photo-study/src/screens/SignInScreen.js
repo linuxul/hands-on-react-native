@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { AuthRoutes } from '../navigations/routes';
 import Input, { ReturnKeyTypes, InputTypes } from '../components/Input';
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useReducer, useRef } from 'react';
 import Button from '../components/Button';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SafeInputView from '../components/SafeInputView';
@@ -17,6 +17,11 @@ import TextButton from '../components/TextButton';
 import HR from '../components/HR';
 import { StatusBar } from 'expo-status-bar';
 import { WHITE } from '../color';
+import {
+  authFormReducer,
+  AuthFormTypes,
+  initAuthForm
+} from '../reducers/authFromReducer';
 
 const SignInScreen = () => {
   const navigation = useNavigation();
@@ -24,37 +29,30 @@ const SignInScreen = () => {
 
   const passwordRef = useRef();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [disabled, setDisabled] = useState(true);
-
-  useEffect(() => {
-    console.log('SignIn Mount');
-    return () => console.log('SignIn Unmount');
-  }, []);
-
-  useEffect(() => {
-    setDisabled(!email || !password);
-  }, [email, password]);
+  const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
 
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        setEmail('');
-        setPassword('');
-        setIsLoading(false);
-        setDisabled(true);
-      };
+      return () => dispatch({ type: AuthFormTypes.RESET });
     }, [])
   );
 
+  const updateForm = (payload) => {
+    const newForm = { ...form, ...payload };
+    const disabled = !newForm.email || !newForm.password;
+
+    dispatch({
+      type: AuthFormTypes.UPDATE_FORM,
+      payload: { disabled, ...payload }
+    });
+  };
+
   const onSubmit = () => {
     Keyboard.dismiss();
-    if (!disabled && !isLoading) {
-      setIsLoading(true);
+    if (!form.disabled && !form.isLoading) {
+      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       console.log(email, password);
-      setIsLoading(false);
+      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
@@ -78,8 +76,8 @@ const SignInScreen = () => {
         >
           <Input
             styles={{ container: { marginBottom: 20 } }}
-            value={email}
-            onChangeText={(text) => setEmail(text.trim())}
+            value={form.email}
+            onChangeText={(text) => updateForm({ email: text.trim() })}
             onSubmitEditing={() => passwordRef.current.focus()}
             inputType={InputTypes.EMAIL}
             returnKeyTypes={ReturnKeyTypes.NEXT}
@@ -87,8 +85,8 @@ const SignInScreen = () => {
 
           <Input
             ref={passwordRef}
-            value={password}
-            onChangeText={(text) => setPassword(text.trim())}
+            value={form.password}
+            onChangeText={(text) => updateForm({ password: text.trim() })}
             onSubmitEditing={onSubmit}
             inputType={InputTypes.PASSWORD}
             returnKeyTypes={ReturnKeyTypes.DONE}
@@ -97,8 +95,8 @@ const SignInScreen = () => {
           <Button
             title="로그인"
             onPress={onSubmit}
-            disabled={disabled}
-            isLoading={isLoading}
+            disabled={form.disabled}
+            isLoading={form.isLoading}
             styles={{
               container: {
                 marginTop: 20
