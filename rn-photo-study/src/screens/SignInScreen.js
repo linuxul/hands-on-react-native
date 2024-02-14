@@ -5,7 +5,7 @@ import {
   StyleSheet,
   View,
   Keyboard,
-  ScrollView,
+  ScrollView
 } from 'react-native';
 import { AuthRoutes } from '../navigations/routes';
 import Input, { ReturnKeyTypes, InputTypes } from '../components/Input';
@@ -20,7 +20,7 @@ import { WHITE } from '../colors';
 import {
   authFormReducer,
   AuthFormTypes,
-  initAuthForm,
+  initAuthForm
 } from '../reducers/authFormReducer';
 import { getAuthErrorMessages, signIn } from '../api/auth';
 import { useUserState } from '../contexts/UserContext';
@@ -46,7 +46,7 @@ const SignInScreen = () => {
 
     dispatch({
       type: AuthFormTypes.UPDATE_FORM,
-      payload: { disabled, ...payload },
+      payload: { disabled, ...payload }
     });
   };
 
@@ -56,14 +56,16 @@ const SignInScreen = () => {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
         const userObject = await signIn(form);
-        setUser(userObject);
+        console.log('userObject : ' + JSON.stringify(userObject));
+        setUser({uid: userObject.uid});
       } catch (e) {
+        console.log('error : ' + JSON.stringify(e));
         const message = getAuthErrorMessages(e.code);
         Alert.alert('로그인 실패', message, [
           {
             text: '확인',
-            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING }),
-          },
+            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING })
+          }
         ]);
       }
     }
@@ -128,7 +130,7 @@ const SignInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   form: {
     flexGrow: 0,
@@ -136,8 +138,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 40,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
+    borderTopRightRadius: 20
+  }
 });
 
 export default SignInScreen;

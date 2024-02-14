@@ -2,7 +2,7 @@ import { Button, StyleSheet, Text, View} from 'react-native'
 import { useUserState } from '../contexts/UserContext'
 
 const ProfileScreen = () => {
-  const [, setUser] = useUserState()
+  const [user, setUser] = useUserState()
 
   return (
     <View style={styles.container}>
