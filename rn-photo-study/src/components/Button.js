@@ -6,7 +6,7 @@ import {
   View
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { WHITE, GRAY, PRIMARY } from '../color';
+import { WHITE, GRAY, PRIMARY } from '../colors';
 
 const Button = ({ styles, title, onPress, disabled, isLoading }) => {
   return (

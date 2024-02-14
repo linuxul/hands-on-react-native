@@ -15,12 +15,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SafeInputView from '../components/SafeInputView';
 import HR from '../components/HR';
 import { StatusBar } from 'expo-status-bar';
-import { WHITE } from '../color';
+import { WHITE } from '../colors';
 import {
   authFormReducer,
   AuthFormTypes,
   initAuthForm
-} from '../reducers/authFromReducer';
+} from '../reducers/authFormReducer';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -30,10 +30,6 @@ const SignUpScreen = () => {
   const passwordConfirmRef = useRef();
 
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
-
-  // useEffect(() => {
-  //   setDisabled(!email || !password || password !== passwordConfirm);
-  // }, [email, password, passwordConfirm]);
 
   const updateForm = (payload) => {
     const newForm = { ...form, ...payload };

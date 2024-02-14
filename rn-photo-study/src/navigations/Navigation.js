@@ -4,8 +4,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { Asset } from 'expo-asset';
 import { initFirebase } from '../api/firebase';
+import { useUserState } from '../contexts/UserContext';
+import MainStack from './MainStack';
 
 const Navigation = () => {
+  const [user, setUser] = useUserState();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -16,15 +19,15 @@ const Navigation = () => {
           require('../../assets/cover.png')
         ).downloadAsync();
 
-        const app = initFirebase()
-        console.log('app : ' + JSON.stringify(app))
+        const app = initFirebase();
+        console.log('app : ' + JSON.stringify(app));
       } catch (error) {
         console.log('error : ' + error);
       } finally {
         setIsReady(true);
       }
     })();
-  }, []);
+  }, [setUser]);
 
   const onReady = async () => {
     console.log('onReady');
@@ -40,7 +43,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onReady}>
-      <AuthStack></AuthStack>
+      {user.uid ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

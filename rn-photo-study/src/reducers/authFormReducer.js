@@ -2,7 +2,7 @@ export const initAuthForm = {
   email: '',
   password: '',
   passwordConfirm: '',
-  disable: true,
+  disabled: true,
   isLoading: false
 };
 

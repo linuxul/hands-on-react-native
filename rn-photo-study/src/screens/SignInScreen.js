@@ -17,21 +17,21 @@ import SafeInputView from '../components/SafeInputView';
 import TextButton from '../components/TextButton';
 import HR from '../components/HR';
 import { StatusBar } from 'expo-status-bar';
-import { WHITE } from '../color';
+import { WHITE } from '../colors';
 import {
   authFormReducer,
   AuthFormTypes,
   initAuthForm
-} from '../reducers/authFromReducer';
+} from '../reducers/authFormReducer';
 import { getAuthErrorMessages, signIn } from '../api/auth';
+import { useUserState } from '../contexts/UserContext';
 
 const SignInScreen = () => {
   const navigation = useNavigation();
   const { top, bottom } = useSafeAreaInsets();
-
   const passwordRef = useRef();
-
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
+  const [, setUser] = useUserState();
 
   useFocusEffect(
     useCallback(() => {
@@ -55,6 +55,7 @@ const SignInScreen = () => {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
         const user = await signIn(form);
+        setUser(user);
         console.log('user : ' + JSON.stringify(user));
       } catch (error) {
         const message = getAuthErrorMessages(error.code);
