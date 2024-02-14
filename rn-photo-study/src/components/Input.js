@@ -16,7 +16,14 @@ export const ReturnKeyTypes = {
 
 export const InputTypes = {
   EMAIL: 'EMAIL',
-  PASSWORD: 'PASSWORD'
+  PASSWORD: 'PASSWORD',
+  PASSWORD_CONFIRM: 'PASSWORD_CONFIRM'
+};
+
+const PasswordProps = {
+  keyboardType: 'default',
+  secureTextEntry: true,
+  iconName: { active: 'lock', inactive: 'lock-outline' }
 };
 
 const InputTypeProps = {
@@ -25,14 +32,17 @@ const InputTypeProps = {
     placeholder: 'your@email.com',
     keyboardType: 'email-address',
     secureTextEntry: false,
-    iconName: { activie: 'email', inactivie: 'email-outline' }
+    iconName: { active: 'email', inactive: 'email-outline' }
   },
   PASSWORD: {
     title: 'PASSWORD',
     placeholder: 'PASSWORD',
-    keyboardType: 'default',
-    secureTextEntry: true,
-    iconName: { activie: 'lock', inactivie: 'lock-outline' }
+    ...PasswordProps
+  },
+  PASSWORD_CONFIRM: {
+    title: 'PASSWORD CONFIRM',
+    placeholder: 'PASSWORD CONFIRM',
+    ...PasswordProps
   }
 };
 
@@ -42,7 +52,7 @@ const Input = forwardRef(({ inputType, styles, ...props }, ref) => {
     placeholder,
     keyboardType,
     secureTextEntry,
-    iconName: { activie, inactivie }
+    iconName: { active, inactive }
   } = InputTypeProps[inputType];
   const { value } = props;
 
@@ -81,7 +91,7 @@ const Input = forwardRef(({ inputType, styles, ...props }, ref) => {
         ></TextInput>
         <View style={[defaultStyles.icon, styles?.icon]}>
           <MaterialCommunityIcons
-            name={isFocused ? activie : inactivie}
+            name={isFocused ? active : inactive}
             size={24}
             color={value || isFocused ? PRIMARY.DEFAULT : GRAY.DARK}
           ></MaterialCommunityIcons>

@@ -1,8 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
-import { Image, StyleSheet, Text, View, Keyboard } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Keyboard,
+  ScrollView
+} from 'react-native';
 import { AuthRoutes } from '../navigations/routes';
 import Input, { ReturnKeyTypes, InputTypes } from '../components/Input';
-import { useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import Button from '../components/Button';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SafeInputView from '../components/SafeInputView';
@@ -19,12 +26,28 @@ const SignInScreen = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    console.log('SignIn Mount');
+    return () => console.log('SignIn Unmount');
+  }, []);
 
   useEffect(() => {
     setDisabled(!email || !password);
   }, [email, password]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setEmail('');
+        setPassword('');
+        setIsLoading(false);
+        setDisabled(true);
+      };
+    }, [])
+  );
 
   const onSubmit = () => {
     Keyboard.dismiss();
@@ -46,7 +69,13 @@ const SignInScreen = () => {
             resizeMode="cover"
           ></Image>
         </View>
-        <View style={[styles.form, { paddingBottom: bottom ? bottom + 10: 40 }]}>
+
+        <ScrollView
+          style={[styles.form, { paddingBottom: bottom ? bottom + 10 : 40 }]}
+          contentContainerStyle={{ alignItems: 'center' }}
+          bounces={false}
+          keyboardShouldPersistTaps="always"
+        >
           <Input
             styles={{ container: { marginBottom: 20 } }}
             value={email}
@@ -79,9 +108,12 @@ const SignInScreen = () => {
           <HR text={'or'} styles={{ container: { marginVertical: 30 } }}></HR>
           <TextButton
             title={'회원가입'}
-            onPress={() => navigation.navigate(AuthRoutes.SIGN_IN)}
+            onPress={() => {
+              console.log('register');
+              navigation.navigate(AuthRoutes.SIGN_UP);
+            }}
           ></TextButton>
-        </View>
+        </ScrollView>
       </View>
     </SafeInputView>
   );
@@ -91,12 +123,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-end'
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // paddingHorizontal: 20
   },
   form: {
-    alignItems: 'center',
+    flexGrow: 0,
     backgroundColor: WHITE,
     paddingHorizontal: 20,
     paddingTop: 40,
