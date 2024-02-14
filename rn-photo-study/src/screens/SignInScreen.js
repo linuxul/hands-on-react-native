@@ -54,14 +54,18 @@ const SignInScreen = () => {
     if (!form.disabled && !form.isLoading) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
-        const user = await signIn(form);
-        setUser(user);
-        console.log('user : ' + JSON.stringify(user));
+        const userObject = await signIn(form);
+        console.log('userObject : ' + JSON.stringify(userObject));
+        // 여기서 에러 발생 setUser(userObject);
       } catch (error) {
         const message = getAuthErrorMessages(error.code);
-        Alert.alert('로그인 실패', message);
+        Alert.alert('로그인 실패', message, [
+          {
+            text: '확인',
+            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING }),
+          },
+        ]);
       }
-      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
