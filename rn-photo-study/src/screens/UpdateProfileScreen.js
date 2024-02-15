@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   Alert,
   Keyboard,
@@ -20,11 +20,26 @@ import { MainRoutes } from '../navigations/routes';
 
 const UpdateProfileScreen = () => {
   const navigation = useNavigation();
+  const { params } = useRoute();
+  // const route = useRoute()
+  console.log('params : ' + JSON.stringify(params))
 
   const [user, setUser] = useUserState();
+  const [photo, setPhoto] = useState({ uri: user.photoURL });
   const [displayName, setDisplayName] = useState(user.displayName);
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (params) {
+      const { selectedPhotos } = params;
+      console.log('selectedPhotos : ' + JSON.stringify(selectedPhotos))
+      if (selectedPhotos?.length) {
+        console.log('photo : ' + selectedPhotos[0]);
+        setPhoto(selectedPhotos[0]);
+      }
+    }
+  }, [params]);
 
   useEffect(() => {
     setDisabled(!displayName || isLoading);
@@ -66,7 +81,7 @@ const UpdateProfileScreen = () => {
           ]}
         >
           <FastImage
-            source={{ uri: user.photoURL }}
+            source={{ uri: photo.uri }}
             style={styles.photo}
           ></FastImage>
           <Pressable
