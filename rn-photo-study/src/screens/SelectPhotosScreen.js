@@ -52,11 +52,11 @@ const SelectPhotosScreen = () => {
         );
 
         console.log('localUris : ' + localUris);
-        navigation.navigate(MainRoutes.WRITE_TEXT, { photoUris: localUris });
+        navigation.replace(MainRoutes.WRITE_TEXT, { photoUris: localUris });
       } catch (e) {
         Alert.alert('사진 정보 조회 실패 : ' + e.message);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
   }, [disabled, photos, navigation]);
 
