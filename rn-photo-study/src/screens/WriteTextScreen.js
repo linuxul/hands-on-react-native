@@ -11,7 +11,7 @@ import {
   Image,
   TextInput
 } from 'react-native';
-import { GRAY, WHITE } from '../colors';
+import { GRAY, WHITE, PRIMARY } from '../colors';
 import { useEffect, useState, useLayoutEffect, useCallback } from 'react';
 import HeaderRight from '../components/HeaderRight';
 import FastImage from '../components/FastImage';
@@ -28,6 +28,7 @@ const WriteTextScreen = () => {
 
   const [photoUris, setPhotoUris] = useState([]);
   const [text, setText] = useState('');
+  const [location, setLocation] = useState('')
 
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,8 +41,8 @@ const WriteTextScreen = () => {
   }, [params]);
 
   useEffect(() => {
-    setDisabled(isLoading || !text);
-  }, [isLoading, text]);
+    setDisabled(isLoading || !text || !location);
+  }, [isLoading, text, location]);
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
@@ -73,7 +74,7 @@ const WriteTextScreen = () => {
         <GooglePlacesAutocomplete
           placeholder="Location"
           styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
-          onPress={(data) => console.log('data : ' + data)}
+          onPress={(data) => setLocation(data.description)}
           onFail={(e) => {
             console.log(
               'GooglePlacesAutocomplate onFail : ' + JSON.stringify(e)
@@ -81,12 +82,14 @@ const WriteTextScreen = () => {
           }}
           query={{ key: MAP_KEY, language: 'ko' }}
           debounce={400}
+          enablePoweredByContainer={false}
+        textInputProps={{editable: !isLoading}}
         ></GooglePlacesAutocomplete>
         <View style={styles.locationIcon}>
           <MaterialCommunityIcons
             name="map-marker"
             size={20}
-            color={GRAY.DARK}
+            color={location ? PRIMARY.DEFAULT : GRAY.LIGHT}
           ></MaterialCommunityIcons>
         </View>
       </View>
