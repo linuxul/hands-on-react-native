@@ -43,16 +43,16 @@ const SelectPhotosScreen = () => {
       setIsLoading(true);
       try {
         const localUris = await Promise.all(
-          photos.map((photo) => {
+          photos.map((photo) =>
             Platform.select({
               ios: getLocalUri(photo.id),
               android: photo.uri
-            });
-          })
+            })
+          )
         );
 
         console.log('localUris : ' + localUris);
-        navigation.navigate(MainRoutes.WRITE_TEXT, { photoUris: localUris});
+        navigation.navigate(MainRoutes.WRITE_TEXT, { photoUris: localUris });
       } catch (e) {
         Alert.alert('사진 정보 조회 실패 : ' + e.message);
       }
@@ -62,9 +62,9 @@ const SelectPhotosScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => {
-        <HeaderRight disabled={disabled} onPress={onSubmit}></HeaderRight>;
-      }
+      headerRight: () => (
+        <HeaderRight disabled={disabled} onPress={onSubmit}></HeaderRight>
+      )
     });
   }, [navigation, disabled, onSubmit]);
 
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backfaceVisibility: GRAY.LIGHT
+    backgroundColor: GRAY.LIGHT
   }
 });
 

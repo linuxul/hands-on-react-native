@@ -30,6 +30,7 @@ const WriteTextScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    console.log('write : ' + JSON.stringify(params))
     if (params) {
       setPhotoUris(params.photoUris ?? []);
     }
@@ -57,7 +58,7 @@ const WriteTextScreen = () => {
       <View style={{ flexDirection: 'row' }}>
         {photoUris.map((uri, idx) => (
           <FastImage
-            key={{ idx }}
+            key={ idx }
             source={{ uri }}
             style={{ width, height: width }}
           ></FastImage>
