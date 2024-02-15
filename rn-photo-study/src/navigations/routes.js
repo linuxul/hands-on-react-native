@@ -8,11 +8,12 @@ export const ContentRoutes = {
   LIST: 'List',
   MAP: 'Map',
   PROFILE: 'Profile'
-}
+};
 
 export const MainRoutes = {
   CONTENT_TAB: 'ContentTab',
   SELECT_PHOTOS: 'SelectPhotos',
   UPDATE_PROFILE: 'UpdateProfile',
-  IMAGE_PICKER: 'ImagePicker'
-}
+  IMAGE_PICKER: 'ImagePicker',
+  WRITE_TEXT: 'WriteText'
+};
