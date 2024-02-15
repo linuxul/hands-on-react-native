@@ -18,6 +18,7 @@ import FastImage from '../components/FastImage';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { MAP_KEY } from '../../env';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import LocationSearch from '../components/LocationSearch';
 
 const MAX_TEXT_LENGTH = 50;
 
@@ -28,7 +29,7 @@ const WriteTextScreen = () => {
 
   const [photoUris, setPhotoUris] = useState([]);
   const [text, setText] = useState('');
-  const [location, setLocation] = useState('')
+  const [location, setLocation] = useState('');
 
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,29 +71,11 @@ const WriteTextScreen = () => {
           ></FastImage>
         ))}
       </View>
-      <View style={styles.location}>
-        <GooglePlacesAutocomplete
-          placeholder="Location"
-          styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
-          onPress={(data) => setLocation(data.description)}
-          onFail={(e) => {
-            console.log(
-              'GooglePlacesAutocomplate onFail : ' + JSON.stringify(e)
-            );
-          }}
-          query={{ key: MAP_KEY, language: 'ko' }}
-          debounce={400}
-          enablePoweredByContainer={false}
-        textInputProps={{editable: !isLoading}}
-        ></GooglePlacesAutocomplete>
-        <View style={styles.locationIcon}>
-          <MaterialCommunityIcons
-            name="map-marker"
-            size={20}
-            color={location ? PRIMARY.DEFAULT : GRAY.LIGHT}
-          ></MaterialCommunityIcons>
-        </View>
-      </View>
+      <LocationSearch
+        onPress={({ description }) => setLocation(description)}
+        isLoading={isLoading}
+        isSelected={!!location}
+      ></LocationSearch>
       <View>
         <TextInput
           value={text}
