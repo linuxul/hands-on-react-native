@@ -31,14 +31,21 @@ const Navigation = () => {
         );
 
         initFirebase();
+
+        const unsubscribe = onAuthStateChanged((user) => {
+          if (user) {
+            setUser(user)
+          }
+          setIsReady(true);
+          unsubscribe()
+        })
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e);
-      } finally {
         setIsReady(true);
       }
     })();
-  }, []);
+  }, [setUser]);
 
   const onReady = async () => {
     if (isReady) {

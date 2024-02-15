@@ -6,6 +6,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import { ContentRoutes } from './routes';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PRIMARY, GRAY } from '../colors';
+import TabBarAddButton from '../components/TabBarAddButton';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,6 +20,8 @@ const getTabBarIcon = ({ focused, color, size, name }) => {
     ></MaterialCommunityIcons>
   );
 };
+
+const AddButtonScreen = () => null;
 
 const ContentTab = () => {
   return (
@@ -46,6 +49,11 @@ const ContentTab = () => {
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'post' }),
           tabBarLabel: '리스트'
         }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name={'AddButton'}
+        component={AddButtonScreen}
+        options={{ tabBarButton: () => <TabBarAddButton></TabBarAddButton> }}
       ></Tab.Screen>
       <Tab.Screen
         name={ContentRoutes.MAP}
