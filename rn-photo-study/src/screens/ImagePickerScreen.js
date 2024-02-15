@@ -1,5 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useRef
+} from 'react';
 import HeaderRight from '../components/HeaderRight';
 import * as MediaLibrary from 'expo-media-library';
 import {
@@ -12,64 +18,49 @@ import {
   useWindowDimensions
 } from 'react-native';
 
+const initialListInfo = { endCursor: '', hasNextPage: true };
+
 const ImagePickerScreen = () => {
   const navigation = useNavigation();
   const [status, requestPermission] = MediaLibrary.usePermissions();
 
   const width = useWindowDimensions().width / 3;
   const [photos, setPhotos] = useState([]);
-  const [listInfo, setListInfo] = useState({
-    endCursor: '',
-    hasNextPage: true
-  });
+  const listInfo = useRef(initialListInfo);
+  const [refreshing, setRefreshing] = useState(false);
+  // const listInfo = useRef({ endCursor: '', hasNextPage: true });
 
-  const getPhotos = async () => {
+  const getPhotos = useCallback(async () => {
     const options = {
       first: 30,
       sortBy: [MediaLibrary.SortBy.creationTime]
     };
 
-    if (listInfo.hasNextPage) {
-      const { assets, endCursor, hasNextPage } =
-        await MediaLibrary.getAssetsAsync(options);
-      setPhotos((prev) => [...prev, ...assets]);
-      setListInfo({ endCursor, hasNextPage });
+    if (listInfo.current.endCursor) {
+      options['after'] = listInfo.current.endCursor;
     }
 
-    // const res = await MediaLibrary.getAssetsAsync(options);
-    // console.log('res : ' + res.assets);
-    // console.log(
-    //   'image : ' +
-    //     res.endCursor +
-    //     ', next : ' +
-    //     res.hasNextPage +
-    //     ', count : ' +
-    //     res.totalCount
-    // );
+    if (listInfo.current.hasNextPage) {
+      const { assets, endCursor, hasNextPage } =
+        await MediaLibrary.getAssetsAsync(options);
+      setPhotos((prev) => (options.after ? [...prev, ...assets] : assets));
+      listInfo.current = { endCursor, hasNextPage };
+    }
+  }, []);
+  console.log('photo : ' + photos.length);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    listInfo.current = initialListInfo;
+    await getPhotos();
+    setRefreshing(false);
   };
 
   useEffect(() => {
     if (status?.granted) {
       getPhotos();
     }
-  }, [status?.granted]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const { granted } = await requestPermission();
-  //     if (!granted) {
-  //       Alert.alert('사진 접근 권한', '사진 접근 권한이 필요합니다.', [
-  //         {
-  //           text: '확인',
-  //           onPress: () => {
-  //             navigation.canGoBack && navigation.goBack();
-  //           }
-  //         }
-  //       ]);
-  //     }
-  //   })();
-  // }, [navigation, requestPermission]);
-  console.log('status : ' + status);
+  }, [getPhotos, status?.granted]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -87,6 +78,11 @@ const ImagePickerScreen = () => {
             <Image source={{ uri: item.uri }} style={styles.photo}></Image>
           </Pressable>
         )}
+        numColumns={3}
+        onEndReached={getPhotos}
+        onEndReachedThreshold={0.4}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
       ></FlatList>
     </View>
   );
