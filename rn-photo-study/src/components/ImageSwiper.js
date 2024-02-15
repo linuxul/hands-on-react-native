@@ -12,16 +12,16 @@ const ImageSwier = ({ photos }) => {
       dot={<View style={styles.dot}></View>}
       activeDot={<View style={styles.activeDot}></View>}
     >
-      {photos.map(({ uri }, idx) => (
+      {photos.map((photo, idx) => (
         <View key={idx} style={styles.photo}>
           <FastImage
-            source={{ uri }}
+            source={{ uri: photo.uri ?? photo }}
             style={StyleSheet.absoluteFill}
             resizeMode="cover"
           ></FastImage>
           <BlurView intensity={Platform.select({ ios: 10, android: 10 })}>
             <Image
-              source={{ uri }}
+              source={{ uri: photo.uri ?? photo }}
               style={styles.photo}
               resizeMode="cover"
             ></Image>

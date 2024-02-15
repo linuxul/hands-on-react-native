@@ -19,6 +19,9 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { MAP_KEY } from '../../env';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LocationSearch from '../components/LocationSearch';
+import { uploadPhoto } from '../api/storage';
+import { useUserState } from '../contexts/UserContext';
+import { createPost } from '../api/post';
 
 const MAX_TEXT_LENGTH = 50;
 
@@ -26,6 +29,7 @@ const WriteTextScreen = () => {
   const navigation = useNavigation();
   const { params } = useRoute();
   const width = useWindowDimensions().width / 4;
+  const [user] = useUserState();
 
   const [photoUris, setPhotoUris] = useState([]);
   const [text, setText] = useState('');
@@ -47,10 +51,21 @@ const WriteTextScreen = () => {
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
-    setTimeout(() => {
+
+    try {
+      const photos = await Promise.all(
+        photoUris.map((uri) => uploadPhoto({ uri, uid: user.uid }))
+      );
+      console.log('photos : ' + photos);
+      console.log('user : ' + JSON.stringify(user));
+      await createPost({photos, location, text, user})
+      navigation.goBack()
+    } catch (e) {
+      Alert.alert('글 작성 실패 : ' + e.message);
       setIsLoading(false);
-    }, 2000);
-  }, []);
+    }
+    
+  }, [photoUris, user, location, text, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
