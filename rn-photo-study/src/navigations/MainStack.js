@@ -3,6 +3,8 @@ import { WHITE } from '../colors';
 import { MainRoutes } from './routes';
 import ContentTab from './ContentTab';
 import SelectPhotosScreen from '../screens/SelectPhotosScreen';
+import UpdateProfileScreen from '../screens/UpdateProfileScreen';
+import HeaderLeft from '../components/HeaderLeft';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,19 +13,25 @@ const MainStack = () => {
     <Stack.Navigator
       screenOptions={{
         contentStyle: { backgroundColor: WHITE },
-        headerShown: false
+        title: '',
+        headerLeft: HeaderLeft
       }}
     >
       <Stack.Screen
         name={MainRoutes.CONTENT_TAB}
         component={ContentTab}
+        options={{ headerShown: false }}
       ></Stack.Screen>
       <Stack.Screen
         name={MainRoutes.SELECT_PHOTOS}
         component={SelectPhotosScreen}
       ></Stack.Screen>
+      <Stack.Screen
+        name={MainRoutes.UPDATE_PROFILE}
+        component={UpdateProfileScreen}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };
 
-export default MainStack
+export default MainStack;

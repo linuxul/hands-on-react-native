@@ -7,8 +7,11 @@ import { GRAY, WHITE } from '../colors';
 import FastImage from '../components/FastImage';
 import DangerAlert, { AlertTypes } from '../components/DangerAlert';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { MainRoutes } from '../navigations/routes';
 
 const ProfileScreen = () => {
+  const navigation = useNavigation()
   const [user, setUser] = useUserState();
   const { top } = useSafeAreaInsets();
   const [visible, setVisible] = useState(false);
@@ -50,7 +53,7 @@ const ProfileScreen = () => {
           ></FastImage>
           <Pressable
             style={styles.editButton}
-            onPress={() => console.log('update')}
+            onPress={() => navigation.navigate(MainRoutes.UPDATE_PROFILE)}
           >
             <MaterialCommunityIcons
               name="pencil"
