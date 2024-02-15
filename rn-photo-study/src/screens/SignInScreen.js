@@ -57,7 +57,7 @@ const SignInScreen = () => {
       try {
         const userObject = await signIn(form);
         console.log('userObject : ' + JSON.stringify(userObject));
-        setUser({uid: userObject.uid});
+        setUser(userObject);
       } catch (e) {
         console.log('error : ' + JSON.stringify(e));
         const message = getAuthErrorMessages(e.code);

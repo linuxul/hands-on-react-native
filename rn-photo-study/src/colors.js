@@ -8,5 +8,6 @@ export const PRIMARY = {
 }
 
 export const GRAY = {
+  DEFAULT: '#d1d5db',
   DARK: '#6b7280'
 }

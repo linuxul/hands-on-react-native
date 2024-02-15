@@ -32,6 +32,7 @@ const Navigation = () => {
 
         initFirebase();
 
+        console.log('signin : ' + JSON.stringify(user))
         const unsubscribe = onAuthStateChanged((user) => {
           if (user) {
             setUser(user)

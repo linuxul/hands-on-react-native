@@ -53,6 +53,7 @@ const SignUpScreen = () => {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
         const userObject = await signUp(form);
+        console.log('userObject : ' + JSON.stringify(userObject));
         setUser(userObject);
       } catch (e) {
         const message = getAuthErrorMessages(e.code);

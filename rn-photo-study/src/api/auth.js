@@ -3,8 +3,12 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
-  onAuthStateChanged as onAuthStateChangedFirebase
+  onAuthStateChanged as onAuthStateChangedFirebase,
+  signOut as signOutFirebase,
+  updateProfile
 } from 'firebase/auth';
+
+const PHOTO_URL = 'https://firebasestorage.googleapis.com/v0/b/rn-photo-ca642.appspot.com/o/profile.png?alt=media';
 
 export const getAuthErrorMessages = (errorCode) => {
   switch (errorCode) {
@@ -34,9 +38,26 @@ export const signUp = async ({ email, password }) => {
     email,
     password
   );
+  await updateUserInfo({
+    displayName: email.split('@')[0].slice(0, 10),
+    photoURL: PHOTO_URL
+  });
+
   return user;
 };
 
 export const onAuthStateChanged = (callback) => {
-  return onAuthStateChangedFirebase(getAuth(), callback)
-}
+  return onAuthStateChangedFirebase(getAuth(), callback);
+};
+
+export const signOut = async () => {
+  await signOutFirebase(getAuth());
+};
+
+export const updateUserInfo = async (userInfo) => {
+  try {
+    await updateProfile(getAuth().currentUser, userInfo);
+  } catch (e) {
+    throw new Error('사용자 정보 수정에 실패했습니다.');
+  }
+};
