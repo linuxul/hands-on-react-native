@@ -10,7 +10,6 @@ import ImagePicker from '../components/ImagePicker';
 const ImagePickerScreen = () => {
   const navigation = useNavigation();
   const stateRoutes = useNavigationState((state) => state.routes);
-
   const { params } = useRoute();
 
   const maxCount = params?.maxCount ?? 1;
