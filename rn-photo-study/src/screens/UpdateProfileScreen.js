@@ -6,7 +6,8 @@ import {
   Pressable,
   StyleSheet,
   TextInput,
-  View
+  View,
+  Platform
 } from 'react-native';
 import { GRAY, WHITE } from '../colors';
 import FastImage from '../components/FastImage';
@@ -17,12 +18,14 @@ import { useLayoutEffect, useEffect, useState, useCallback } from 'react';
 import HeaderRight from '../components/HeaderRight';
 import { updateUserInfo } from '../api/auth';
 import { MainRoutes } from '../navigations/routes';
+import { getLocalUri } from '../components/ImagePicker';
+import { uploadPhoto } from '../api/storage';
 
 const UpdateProfileScreen = () => {
   const navigation = useNavigation();
   const { params } = useRoute();
   // const route = useRoute()
-  console.log('params : ' + JSON.stringify(params))
+  console.log('params : ' + JSON.stringify(params));
 
   const [user, setUser] = useUserState();
   const [photo, setPhoto] = useState({ uri: user.photoURL });
@@ -33,7 +36,7 @@ const UpdateProfileScreen = () => {
   useEffect(() => {
     if (params) {
       const { selectedPhotos } = params;
-      console.log('selectedPhotos : ' + JSON.stringify(selectedPhotos))
+      console.log('selectedPhotos : ' + JSON.stringify(selectedPhotos));
       if (selectedPhotos?.length) {
         console.log('photo : ' + selectedPhotos[0]);
         setPhoto(selectedPhotos[0]);
@@ -50,18 +53,27 @@ const UpdateProfileScreen = () => {
     if (!disabled) {
       setIsLoading(true);
       try {
-        const userInfo = { displayName };
+        const localUri = Platform.select({
+          ios: await getLocalUri(photo.id),
+          android: photo.id
+        });
+        console.log('localUri ' + localUri);
+        const photoURL = await uploadPhoto({ uri: localUri, uid: user.uid });
+        console.log('photoURL : ' + photoURL);
 
+        const userInfo = { displayName, photoURL };
         await updateUserInfo(userInfo);
         setUser((prev) => ({ ...prev, ...userInfo }));
 
         navigation.goBack();
+
+        // setIsLoading(false);
       } catch (e) {
         Alert.alert('사용자 수정 실패', e.message);
         setIsLoading(false);
       }
     }
-  }, [disabled, displayName, navigation, setUser]);
+  }, [disabled, displayName, navigation, setUser, photo.id, photo.uri]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
