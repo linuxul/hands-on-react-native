@@ -5,7 +5,7 @@ import { BLACK, PRIMARY } from '../colors';
 import FastImage from './FastImage';
 import PropTypes from 'prop-types';
 
-const ImageSwier = ({ photos }) => {
+const ImageSwiper = ({ photos }) => {
   return (
     <Swiper
       loop={false}
@@ -32,7 +32,7 @@ const ImageSwier = ({ photos }) => {
   );
 };
 
-ImageSwier.propTypes = {
+ImageSwiper.propTypes = {
   photos: PropTypes.array.isRequired
 };
 
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ImageSwier;
+export default ImageSwiper;

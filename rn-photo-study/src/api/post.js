@@ -12,6 +12,28 @@ import {
   deleteDoc
 } from 'firebase/firestore';
 
+export const createPost = async ({ photos, location, text, user }) => {
+  console.log('firebase createPost : ' + JSON.stringify(user));
+
+  try {
+    const { uid, displayName, photoURL } = user;
+    const collectionRef = collection(getFirestore(), 'posts');
+    const documentRef = doc(collectionRef);
+    const id = documentRef.id;
+    await setDoc(documentRef, {
+      id,
+      photos,
+      location,
+      text,
+      user: { uid, displayName, photoURL },
+      createdTs: Date.now()
+    });
+  } catch (e) {
+    console.log('createPost error : ' + e);
+    throw new Error('글 작성 실패');
+  }
+};
+
 const getOption = ({ after, uid }) => {
   const collectionRef = collection(getFirestore(), 'posts');
 
@@ -42,27 +64,7 @@ const getOption = ({ after, uid }) => {
   }
 };
 
-export const createPost = async ({ photos, location, text, user }) => {
-  console.log('firebase createPost : ' + JSON.stringify(user));
 
-  try {
-    const { uid, displayName, photoURL } = user;
-    const collectionRef = collection(getFirestore(), 'posts');
-    const documentRef = doc(collectionRef);
-    const id = documentRef.id;
-    await setDoc(documentRef, {
-      id,
-      photos,
-      location,
-      text,
-      user: { uid, displayName, photoURL },
-      createdTs: Date.now()
-    });
-  } catch (e) {
-    console.log('createPost error : ' + e);
-    throw new Error('글 작성 실패');
-  }
-};
 
 export const getPosts = async ({ after, uid }) => {
   console.log('firebase getPosts : ' + JSON.stringify(uid));

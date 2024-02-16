@@ -20,10 +20,10 @@ export const uploadPhoto = async ({ uri, uid }) => {
   });
 
   const filename = uri.split('/').pop();
-  const stoageRef = ref(getStorage(), `/${uid}/${filename}`);
-  await uploadBytes(stoageRef, blob);
+  const storageRef = ref(getStorage(), `/${uid}/${filename}`);
+  await uploadBytes(storageRef, blob);
 
   blob.close();
 
-  return await getDownloadURL(stoageRef);
+  return await getDownloadURL(storageRef);
 };
