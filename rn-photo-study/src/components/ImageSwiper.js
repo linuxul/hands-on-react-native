@@ -23,7 +23,7 @@ const ImageSwiper = ({ photos }) => {
             <Image
               source={{ uri: photo.uri ?? photo }}
               style={styles.photo}
-              resizeMode="cover"
+              resizeMode="contain"
             ></Image>
           </BlurView>
         </View>

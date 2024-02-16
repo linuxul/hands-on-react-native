@@ -44,7 +44,7 @@ const WriteTextScreen = () => {
     if (params) {
       const { photoUris, post } = params;
       if (photoUris) {
-        setPhotoUris(params.photoUris ?? []);
+        setPhotoUris(params.photoUris);
       } else if (post) {
         setPhotoUris(post.photos);
         setText(post.text);

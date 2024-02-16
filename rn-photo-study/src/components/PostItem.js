@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 import FastImage from './FastImage';
-import ImageSwier from './ImageSwiper';
+import ImageSwiper from './ImageSwiper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { PRIMARY, WHITE, DANGER, GRAY } from '../colors';
@@ -28,7 +28,7 @@ const ActionSheetOptions = {
 };
 
 const PostItem = memo(({ post }) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const width = useWindowDimensions().width;
   const [user] = useUserState();
@@ -40,7 +40,7 @@ const PostItem = memo(({ post }) => {
     if (idx === 0) {
       setVisible(true);
     } else if (idx === 1) {
-      navigation.navigate(MainRoutes.WRITE_TEXT, { post })
+      navigation.navigate(MainRoutes.WRITE_TEXT, { post });
     }
   };
 
@@ -51,12 +51,12 @@ const PostItem = memo(({ post }) => {
       <DangerAlert
         alertType={AlertTypes.DELETE_POST}
         visible={visible}
-        onClose={ onClose }
+        onClose={onClose}
         onConfirm={async () => {
           try {
             await deletePost(post.id);
             event.emit(EventTypes.DELETE, { id: post.id });
-            console.log('delete : ' + post.id)
+            console.log('delete : ' + post.id);
           } catch (e) {
             Alert.alert('글 삭제에 실패했습니다.');
             onClose();
@@ -91,7 +91,7 @@ const PostItem = memo(({ post }) => {
           )}
         </View>
         <View style={{ width, height: width }}>
-          <ImageSwier photos={post.photos}></ImageSwier>
+          <ImageSwiper photos={post.photos}></ImageSwiper>
         </View>
         <View style={styles.location}>
           <MaterialCommunityIcons

@@ -16,7 +16,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useState, useLayoutEffect, useCallback } from 'react';
 import { getLocalUri } from '../components/ImagePicker';
 import HeaderRight from '../components/HeaderRight';
-import ImageSwier from '../components/ImageSwiper';
+import ImageSwiper from '../components/ImageSwiper';
 
 const SelectPhotosScreen = () => {
   const navigation = useNavigation();
@@ -75,7 +75,7 @@ const SelectPhotosScreen = () => {
       </Text>
       <View style={{ width, height: width }}>
         {photos.length ? (
-          <ImageSwier photos={photos}></ImageSwier>
+          <ImageSwiper photos={photos}></ImageSwiper>
         ) : (
           <Pressable
             style={styles.photoButton}

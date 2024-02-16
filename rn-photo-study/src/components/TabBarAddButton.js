@@ -8,7 +8,7 @@ const TabBarAddButton = () => {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View style={styles.container}>
       <Pressable
         style={styles.button}
         onPress={() => navigation.navigate(MainRoutes.SELECT_PHOTOS)}

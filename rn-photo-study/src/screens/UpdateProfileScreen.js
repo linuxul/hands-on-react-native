@@ -55,7 +55,7 @@ const UpdateProfileScreen = () => {
       try {
         const localUri = Platform.select({
           ios: await getLocalUri(photo.id),
-          android: photo.id
+          android: photo.uri
         });
         console.log('localUri ' + localUri);
         const photoURL = await uploadPhoto({ uri: localUri, uid: user.uid });
@@ -73,7 +73,7 @@ const UpdateProfileScreen = () => {
         setIsLoading(false);
       }
     }
-  }, [disabled, displayName, navigation, setUser, photo.id, photo.uri]);
+  }, [disabled, displayName, navigation, setUser, photo.id, photo.uri, user.uid]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     width: 200,
     fontSize: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: GRAY.DARK
+    borderBottomColor: GRAY.DEFAULT
   }
 });
 
