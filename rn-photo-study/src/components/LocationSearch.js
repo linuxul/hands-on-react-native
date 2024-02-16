@@ -4,32 +4,40 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, PRIMARY } from '../colors';
 import { MAP_KEY } from '../../env';
 import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
 
-const LocationSearch = ({ styles, onPress, isLoading, isSelected }) => {
-  return (
-    <View style={[defaultStyles.container, styles?.container]}>
-      <GooglePlacesAutocomplete
-        placeholder="Location"
-        styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
-        onPress={onPress}
-        onFail={(e) => {
-          console.log('GooglePlacesAutocomplate onFail : ' + JSON.stringify(e));
-        }}
-        query={{ key: MAP_KEY, language: 'ko' }}
-        debounce={400}
-        enablePoweredByContainer={false}
-        textInputProps={{ editable: !isLoading }}
-      ></GooglePlacesAutocomplete>
-      <View style={[defaultStyles.icon, styles?.icon]}>
-        <MaterialCommunityIcons
-          name="map-marker"
-          size={20}
-          color={isSelected ? PRIMARY.DEFAULT : GRAY.LIGHT}
-        ></MaterialCommunityIcons>
+const LocationSearch = forwardRef(
+  ({ styles, onPress, isLoading, isSelected }, ref) => {
+    return (
+      <View style={[defaultStyles.container, styles?.container]}>
+        <GooglePlacesAutocomplete
+          ref={ref}
+          placeholder="Location"
+          styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
+          onPress={onPress}
+          onFail={(e) => {
+            console.log(
+              'GooglePlacesAutocomplate onFail : ' + JSON.stringify(e)
+            );
+          }}
+          query={{ key: MAP_KEY, language: 'ko' }}
+          debounce={400}
+          enablePoweredByContainer={false}
+          textInputProps={{ editable: !isLoading }}
+        ></GooglePlacesAutocomplete>
+        <View style={[defaultStyles.icon, styles?.icon]}>
+          <MaterialCommunityIcons
+            name="map-marker"
+            size={20}
+            color={isSelected ? PRIMARY.DEFAULT : GRAY.LIGHT}
+          ></MaterialCommunityIcons>
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
+
+LocationSearch.displayName = 'LocationSearch'
 
 LocationSearch.defaultProps = {
   isLoading: false,

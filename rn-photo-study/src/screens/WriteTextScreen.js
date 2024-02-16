@@ -8,13 +8,19 @@ import {
   TextInput
 } from 'react-native';
 import { GRAY, WHITE, PRIMARY } from '../colors';
-import { useEffect, useState, useLayoutEffect, useCallback } from 'react';
+import {
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useCallback,
+  useRef
+} from 'react';
 import HeaderRight from '../components/HeaderRight';
 import FastImage from '../components/FastImage';
 import LocationSearch from '../components/LocationSearch';
 import { uploadPhoto } from '../api/storage';
 import { useUserState } from '../contexts/UserContext';
-import { createPost } from '../api/post';
+import { createPost, updatePost } from '../api/post';
 import event, { EventTypes } from '../event';
 
 const MAX_TEXT_LENGTH = 50;
@@ -28,6 +34,7 @@ const WriteTextScreen = () => {
   const [photoUris, setPhotoUris] = useState([]);
   const [text, setText] = useState('');
   const [location, setLocation] = useState('');
+  const locationRef = useRef(null);
 
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +42,15 @@ const WriteTextScreen = () => {
   useEffect(() => {
     console.log('write : ' + JSON.stringify(params));
     if (params) {
-      setPhotoUris(params.photoUris ?? []);
+      const { photoUris, post } = params;
+      if (photoUris) {
+        setPhotoUris(params.photoUris ?? []);
+      } else if (post) {
+        setPhotoUris(post.photos);
+        setText(post.text);
+        setLocation(post.location);
+        locationRef.current?.setAddressText(post.location);
+      }
     }
   }, [params]);
 
@@ -45,22 +60,27 @@ const WriteTextScreen = () => {
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
-
     try {
-      const photos = await Promise.all(
-        photoUris.map((uri) => uploadPhoto({ uri, uid: user.uid }))
-      );
-      console.log('photos : ' + photos);
-      console.log('user : ' + JSON.stringify(user));
-      await createPost({ photos, location, text, user });
-      event.emit(EventTypes.REFRESH);
-
+      if (params?.photoUris) {
+        const photos = await Promise.all(
+          photoUris.map((uri) => uploadPhoto({ uri, uid: user.uid }))
+        );
+        console.log('photos : ' + photos);
+        console.log('user : ' + JSON.stringify(user));
+        await createPost({ photos, location, text, user });
+        event.emit(EventTypes.REFRESH);
+      } else if (params?.post) {
+        const { post } = params;
+        const updatedPost = { ...post, location, text } 
+        await updatePost(updatedPost);
+        event.emit(EventTypes.UPDATE, updatePost);
+      }
       navigation.goBack();
     } catch (e) {
-      Alert.alert('글 작성 실패 : ' + e.message);
+      Alert.alert(e.message);
       setIsLoading(false);
     }
-  }, [photoUris, user, location, text, navigation]);
+  }, [photoUris, user, location, text, navigation, params]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -82,6 +102,7 @@ const WriteTextScreen = () => {
         ))}
       </View>
       <LocationSearch
+        ref={locationRef}
         onPress={({ description }) => setLocation(description)}
         isLoading={isLoading}
         isSelected={!!location}

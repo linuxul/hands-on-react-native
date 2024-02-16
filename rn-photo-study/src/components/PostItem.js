@@ -17,6 +17,8 @@ import { useUserState } from '../contexts/UserContext';
 import DangerAlert, { AlertTypes } from './DangerAlert';
 import { deletePost } from '../api/post';
 import event, { EventTypes } from '../event';
+import { useNavigation } from '@react-navigation/native';
+import { MainRoutes } from '../navigations/routes';
 
 const ActionSheetOptions = {
   options: ['삭제', '수정', '취소'],
@@ -26,6 +28,8 @@ const ActionSheetOptions = {
 };
 
 const PostItem = memo(({ post }) => {
+  const navigation = useNavigation()
+
   const width = useWindowDimensions().width;
   const [user] = useUserState();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -35,6 +39,8 @@ const PostItem = memo(({ post }) => {
     console.log('idx : ' + idx);
     if (idx === 0) {
       setVisible(true);
+    } else if (idx === 1) {
+      navigation.navigate(MainRoutes.WRITE_TEXT, { post })
     }
   };
 
@@ -50,6 +56,7 @@ const PostItem = memo(({ post }) => {
           try {
             await deletePost(post.id);
             event.emit(EventTypes.DELETE, { id: post.id });
+            console.log('delete : ' + post.id)
           } catch (e) {
             Alert.alert('글 삭제에 실패했습니다.');
             onClose();

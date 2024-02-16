@@ -31,11 +31,17 @@ const usePosts = (uid) => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  const deletePost = ({id}) => {
-    setData((prev) => prev.filter((item) => item.id !== id))
-  }
+  const deletePost = ({ id }) => {
+    console.log('deletePost : ' + id);
+    setData((prev) => prev.filter((item) => item.id !== id));
+  };
 
-  return { data, fetchNextPage, refetch, refetching, deletePost };
+  const updatePost = (post) => {
+    console.log('updatePost : ' + JSON.stringify(post));
+    setData((prev) => prev.map((item) => (item.id === post.id ? post : item)));
+  };
+
+  return { data, fetchNextPage, refetch, refetching, deletePost, updatePost };
 };
 
 export default usePosts;
