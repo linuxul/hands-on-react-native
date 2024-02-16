@@ -3,18 +3,24 @@ import PostItem from './PostItem';
 import { GRAY } from '../colors';
 import PropTypes from 'prop-types';
 
-const PostList = ({ data }) => {
+const PostList = ({ data, fetchNextPage, refreshing, refetch }) => {
   return (
     <FlatList
       data={data}
       renderItem={({ item }) => <PostItem post={item}></PostItem>}
       ItemSeparatorComponent={() => <View style={styles.separator}></View>}
+      onEndReached={fetchNextPage}
+      refreshing={refreshing}
+      onRefresh={refetch}
     ></FlatList>
   );
 };
 
 PostList.propTypes = {
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  fetchNextPage: PropTypes.func,
+  refreshing: PropTypes.bool,
+  refetch: PropTypes.func
 };
 
 const styles = StyleSheet.create({
