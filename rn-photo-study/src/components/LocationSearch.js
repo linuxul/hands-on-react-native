@@ -7,13 +7,16 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
 const LocationSearch = forwardRef(
-  ({ styles, onPress, isLoading, isSelected }, ref) => {
+  ({ styles, onPress, isLoading, isSelected, iconVisible }, ref) => {
     return (
       <View style={[defaultStyles.container, styles?.container]}>
         <GooglePlacesAutocomplete
           ref={ref}
           placeholder="Location"
-          styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
+          styles={{
+            container: { flex: 0 },
+            textInput: { paddingLeft: iconVisible ? 30 : 10 }
+          }}
           onPress={onPress}
           onFail={(e) => {
             console.log(
@@ -24,31 +27,37 @@ const LocationSearch = forwardRef(
           debounce={400}
           enablePoweredByContainer={false}
           textInputProps={{ editable: !isLoading }}
+          fetchDetails={true}
         ></GooglePlacesAutocomplete>
-        <View style={[defaultStyles.icon, styles?.icon]}>
-          <MaterialCommunityIcons
-            name="map-marker"
-            size={20}
-            color={isSelected ? PRIMARY.DEFAULT : GRAY.LIGHT}
-          ></MaterialCommunityIcons>
-        </View>
+
+        {iconVisible && (
+          <View style={[defaultStyles.icon, styles?.icon]}>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={20}
+              color={isSelected ? PRIMARY.DEFAULT : GRAY.LIGHT}
+            ></MaterialCommunityIcons>
+          </View>
+        )}
       </View>
     );
   }
 );
 
-LocationSearch.displayName = 'LocationSearch'
+LocationSearch.displayName = 'LocationSearch';
 
 LocationSearch.defaultProps = {
   isLoading: false,
-  isSelected: false
+  isSelected: false,
+  iconVisible: true
 };
 
 LocationSearch.propTypes = {
   styles: PropTypes.object,
   onPress: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  isSelected: PropTypes.bool
+  isSelected: PropTypes.bool,
+  iconVisible: PropTypes.bool
 };
 
 const defaultStyles = StyleSheet.create({
