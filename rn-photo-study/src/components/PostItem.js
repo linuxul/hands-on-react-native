@@ -27,8 +27,9 @@ const PostItem = memo(({ post }) => {
             size={24}
             color={PRIMARY.DEFAULT}
           ></MaterialCommunityIcons>
-          <Text style={styles.text}>{post.text}</Text>
+          <Text>{post.location}</Text>
         </View>
+        <Text style={styles.text}>{post.text}</Text>
     </View>
   );
 });
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   text: {
+    paddingHorizontal: 10,
     paddingVertical: 10
   }
 });

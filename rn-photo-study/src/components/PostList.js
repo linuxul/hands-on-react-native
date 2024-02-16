@@ -1,11 +1,23 @@
 import { FlatList, StyleSheet, View } from 'react-native';
 import PostItem from './PostItem';
 import { GRAY } from '../colors';
-import PropTypes from 'prop-types';
 import usePosts from '../hooks/usePosts';
+import { useEffect } from 'react';
+import event, { EventTypes } from '../event';
+import { useUserState } from '../contexts/UserContext';
+import PropTypes from 'prop-types';
 
-const PostList = () => {
-  const { data, fetchNextPage, refetch, refetching } = usePosts();
+const PostList = ({ isMyPost }) => {
+  const [user] = useUserState();
+  const { data, fetchNextPage, refetch, refetching } = usePosts(
+    isMyPost && user.uid
+  );
+
+  useEffect(() => {
+    event.addListener(EventTypes.REFRESH, refetch);
+
+    return () => event.removeAllListeners();
+  }, [refetch]);
 
   return (
     <FlatList
@@ -20,11 +32,8 @@ const PostList = () => {
 };
 
 PostList.propTypes = {
-  data: PropTypes.array.isRequired,
-  fetchNextPage: PropTypes.func,
-  refreshing: PropTypes.bool,
-  refetch: PropTypes.func
-};
+  isMyPost: PropTypes.bool
+}
 
 const styles = StyleSheet.create({
   separator: {

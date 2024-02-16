@@ -1,27 +1,21 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-  Button,
   StyleSheet,
   Text,
   View,
   useWindowDimensions,
-  Pressable,
   Alert,
-  Platform,
-  Image,
   TextInput
 } from 'react-native';
 import { GRAY, WHITE, PRIMARY } from '../colors';
 import { useEffect, useState, useLayoutEffect, useCallback } from 'react';
 import HeaderRight from '../components/HeaderRight';
 import FastImage from '../components/FastImage';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { MAP_KEY } from '../../env';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LocationSearch from '../components/LocationSearch';
 import { uploadPhoto } from '../api/storage';
 import { useUserState } from '../contexts/UserContext';
 import { createPost } from '../api/post';
+import event, { EventTypes } from '../event';
 
 const MAX_TEXT_LENGTH = 50;
 
@@ -58,13 +52,14 @@ const WriteTextScreen = () => {
       );
       console.log('photos : ' + photos);
       console.log('user : ' + JSON.stringify(user));
-      await createPost({photos, location, text, user})
-      navigation.goBack()
+      await createPost({ photos, location, text, user });
+      event.emit(EventTypes.REFRESH);
+
+      navigation.goBack();
     } catch (e) {
       Alert.alert('글 작성 실패 : ' + e.message);
       setIsLoading(false);
     }
-    
   }, [photoUris, user, location, text, navigation]);
 
   useLayoutEffect(() => {
