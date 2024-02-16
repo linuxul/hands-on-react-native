@@ -1,35 +1,72 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View
+} from 'react-native';
 import FastImage from './FastImage';
 import ImageSwier from './ImageSwiper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import { PRIMARY, WHITE } from '../colors';
+import { PRIMARY, WHITE, DANGER, GRAY } from '../colors';
 import { memo } from 'react';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useUserState } from '../contexts/UserContext';
+
+const ActionSheetOptions = {
+  options: ['삭제', '수정', '취소'],
+  cancelButtonIndex: 2,
+  destructiveButtonIndex: 0,
+  destructiveColor: DANGER.DEFAULT
+};
 
 const PostItem = memo(({ post }) => {
   const width = useWindowDimensions().width;
+  const [user] = useUserState();
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const onPressActionSheet = (idx) => {
+    console.log('idx : ' + idx);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <FastImage
-          source={{ uri: post.user.photoURL }}
-          style={styles.profilePhoto}
-        ></FastImage>
-        <Text style={styles.nickname}>{post.user.displayName}</Text>
+        <View style={styles.profile}>
+          <FastImage
+            source={{ uri: post.user.photoURL }}
+            style={styles.profilePhoto}
+          ></FastImage>
+          <Text style={styles.nickname}>{post.user.displayName}</Text>
+        </View>
+        {post.user.uid === user.uid && (
+          <Pressable
+            hitSlop={10}
+            onPress={() =>
+              showActionSheetWithOptions(ActionSheetOptions, onPressActionSheet)
+            }
+          >
+            <MaterialCommunityIcons
+              name="dots-horizontal"
+              size={24}
+              color={GRAY.DARK}
+            ></MaterialCommunityIcons>
+          </Pressable>
+        )}
       </View>
       <View style={{ width, height: width }}>
-          <ImageSwier photos={post.photos}></ImageSwier>
-        </View>
+        <ImageSwier photos={post.photos}></ImageSwier>
+      </View>
       <View style={styles.location}>
-          <MaterialCommunityIcons
-            name="map-marker"
-            size={24}
-            color={PRIMARY.DEFAULT}
-          ></MaterialCommunityIcons>
-          <Text>{post.location}</Text>
-        </View>
-        <Text style={styles.text}>{post.text}</Text>
+        <MaterialCommunityIcons
+          name="map-marker"
+          size={24}
+          color={PRIMARY.DEFAULT}
+        ></MaterialCommunityIcons>
+        <Text>{post.location}</Text>
+      </View>
+      <Text style={styles.text}>{post.text}</Text>
     </View>
   );
 });
@@ -49,7 +86,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    justifyContent: 'space-between'
   },
   profilePhoto: {
     width: 40,
@@ -69,6 +107,10 @@ const styles = StyleSheet.create({
   text: {
     paddingHorizontal: 10,
     paddingVertical: 10
+  },
+  profile: {
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });
 
