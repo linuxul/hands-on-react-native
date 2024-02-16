@@ -8,7 +8,8 @@ import {
   orderBy,
   limit,
   startAfter,
-  where
+  where,
+  deleteDoc
 } from 'firebase/firestore';
 
 const getOption = ({ after, uid }) => {
@@ -64,3 +65,7 @@ export const getPosts = async ({ after, uid }) => {
   const last = documentSnapshot.docs[documentSnapshot.docs.length - 1];
   return { list, last };
 };
+
+export const deletePost = async (id) => {
+  await deleteDoc(doc(getFirestore(), `posts/${id}`))
+}

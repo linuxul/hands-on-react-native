@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   StyleSheet,
   Text,
@@ -10,9 +11,12 @@ import ImageSwier from './ImageSwiper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { PRIMARY, WHITE, DANGER, GRAY } from '../colors';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useUserState } from '../contexts/UserContext';
+import DangerAlert, { AlertTypes } from './DangerAlert';
+import { deletePost } from '../api/post';
+import event, { EventTypes } from '../event';
 
 const ActionSheetOptions = {
   options: ['삭제', '수정', '취소'],
@@ -25,49 +29,74 @@ const PostItem = memo(({ post }) => {
   const width = useWindowDimensions().width;
   const [user] = useUserState();
   const { showActionSheetWithOptions } = useActionSheet();
+  const [visible, setVisible] = useState(false);
 
   const onPressActionSheet = (idx) => {
     console.log('idx : ' + idx);
+    if (idx === 0) {
+      setVisible(true);
+    }
   };
 
+  const onClose = () => setVisible(false);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.profile}>
-          <FastImage
-            source={{ uri: post.user.photoURL }}
-            style={styles.profilePhoto}
-          ></FastImage>
-          <Text style={styles.nickname}>{post.user.displayName}</Text>
+    <>
+      <DangerAlert
+        alertType={AlertTypes.DELETE_POST}
+        visible={visible}
+        onClose={ onClose }
+        onConfirm={async () => {
+          try {
+            await deletePost(post.id);
+            event.emit(EventTypes.DELETE, { id: post.id });
+          } catch (e) {
+            Alert.alert('글 삭제에 실패했습니다.');
+            onClose();
+          }
+        }}
+      ></DangerAlert>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.profile}>
+            <FastImage
+              source={{ uri: post.user.photoURL }}
+              style={styles.profilePhoto}
+            ></FastImage>
+            <Text style={styles.nickname}>{post.user.displayName}</Text>
+          </View>
+          {post.user.uid === user.uid && (
+            <Pressable
+              hitSlop={10}
+              onPress={() =>
+                showActionSheetWithOptions(
+                  ActionSheetOptions,
+                  onPressActionSheet
+                )
+              }
+            >
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={24}
+                color={GRAY.DARK}
+              ></MaterialCommunityIcons>
+            </Pressable>
+          )}
         </View>
-        {post.user.uid === user.uid && (
-          <Pressable
-            hitSlop={10}
-            onPress={() =>
-              showActionSheetWithOptions(ActionSheetOptions, onPressActionSheet)
-            }
-          >
-            <MaterialCommunityIcons
-              name="dots-horizontal"
-              size={24}
-              color={GRAY.DARK}
-            ></MaterialCommunityIcons>
-          </Pressable>
-        )}
+        <View style={{ width, height: width }}>
+          <ImageSwier photos={post.photos}></ImageSwier>
+        </View>
+        <View style={styles.location}>
+          <MaterialCommunityIcons
+            name="map-marker"
+            size={24}
+            color={PRIMARY.DEFAULT}
+          ></MaterialCommunityIcons>
+          <Text>{post.location}</Text>
+        </View>
+        <Text style={styles.text}>{post.text}</Text>
       </View>
-      <View style={{ width, height: width }}>
-        <ImageSwier photos={post.photos}></ImageSwier>
-      </View>
-      <View style={styles.location}>
-        <MaterialCommunityIcons
-          name="map-marker"
-          size={24}
-          color={PRIMARY.DEFAULT}
-        ></MaterialCommunityIcons>
-        <Text>{post.location}</Text>
-      </View>
-      <Text style={styles.text}>{post.text}</Text>
-    </View>
+    </>
   );
 });
 
